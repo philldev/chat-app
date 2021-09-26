@@ -12,10 +12,13 @@
     "@heroicons/react": "^1.0.4",
     "next": "11.1.2",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-contenteditable": "^3.3.6",
+    "react-dom": "17.0.2",
+    "sanitize-html": "^2.5.1"
   },
   "devDependencies": {
     "@types/react": "17.0.24",
+    "@types/sanitize-html": "^2.3.2",
     "autoprefixer": "^10.3.5",
     "cross-env": "^7.0.3",
     "eslint": "7.32.0",

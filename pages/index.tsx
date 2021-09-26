@@ -1,8 +1,10 @@
+import { DotsVerticalIcon } from '@heroicons/react/outline'
+import { ChatAltIcon } from '@heroicons/react/solid'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { ChatAltIcon } from '@heroicons/react/solid'
-import { DotsVerticalIcon } from '@heroicons/react/outline'
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import ContentEditable from 'react-contenteditable'
+import sanitize from 'sanitize-html'
 
 const Home: NextPage = () => {
 	return (
@@ -14,7 +16,7 @@ const Home: NextPage = () => {
 			</Head>
 			<div className='flex justify-center min-h-screen text-white bg-gray-900'>
 				<div className='flex flex-1 h-full max-w-6xl min-h-screen py-4 rounded'>
-					<div className='flex flex-col flex-1 max-w-xs overflow-y-auto bg-gray-800 border-r border-gray-900'>
+					<div className='flex flex-col flex-1 max-w-[30%] overflow-y-auto bg-gray-800 border-r border-gray-900'>
 						<div className='flex items-center justify-between h-16 px-2'>
 							<div className='flex items-center justify-center w-10 h-10 text-xs bg-red-500 rounded-full'>
 								avatar
@@ -77,16 +79,46 @@ const Home: NextPage = () => {
 							</div>
 						</div>
 						<div className='flex items-center p-2 overflow-y-hidden border-t border-gray-900'>
-							<div
-								contentEditable
-								className='w-full p-2 bg-gray-900 rounded-lg max-h-[100px] overflow-y-auto'
-							></div>
+							<MessageInput />
 						</div>
 					</div>
 				</div>
 			</div>
 		</>
 	)
+}
+
+// const MessageInput = () => {
+// 	const text = useRef('test')
+// 	useEffect(() => {
+// 		console.log(text.current);
+// 	},)
+// 	return (
+// 		<ContentEditable
+// 		 className='w-full p-2 bg-gray-900'
+// 			html={text.current}
+// 			onChange={(e) => {
+// 				text.current = e.target.value
+// 			}}
+
+// 		/>
+// 	)
+// }
+
+class MessageInput extends React.Component {
+	state = {
+		html: '',
+	}
+
+	handleChange = (evt: { target: { value: string } }) => {
+		this.setState({ html: evt.target.value})
+	}
+
+	render() {
+		return (
+			<ContentEditable className='w-full p-2 whitespace-pre-line bg-gray-900' html={this.state.html} onChange={this.handleChange} />
+		)
+	}
 }
 
 export default Home
