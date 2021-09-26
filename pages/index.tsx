@@ -59,24 +59,28 @@ const Home: NextPage = () => {
 								<div>Mark Goldbridge</div>
 							</div>
 						</div>
-						<div className='flex flex-col justify-end flex-1 p-8 text-sm'>
+						<div className='flex flex-col justify-end flex-1 px-8 pb-2 space-y-3 text-sm'>
 							<div>
-								<div className='p-2 bg-gray-700 rounded-lg max-w-max'>test 123</div>
+								<div className='max-w-[65%]'>
+									<div className='p-2 pl-8 bg-gray-700 rounded-lg max-w-max'>
+										Lorem ipsum dolor sit amet.
+									</div>
+								</div>
 							</div>
 							<div className='flex flex-row-reverse'>
 								<div className='max-w-[65%]'>
-									<div className='p-2 pr-8 text-right whitespace-pre-wrap bg-blue-800 rounded-lg max-w-max'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima iusto em sequi deserunt molestiae delectus.</div>
+									<div className='p-2 pr-8 text-right whitespace-pre-wrap bg-blue-800 rounded-lg max-w-max'>
+										Lorem ipsum dolor sit amet consectetur adipisicing elit.
+										Minima iusto em sequi deserunt molestiae delectus.
+									</div>
 								</div>
-							</div>
-							<div>
-								<div className='p-2 bg-gray-700 rounded-lg max-w-max'>test 123</div>
-							</div>
-							<div className='flex flex-row-reverse'>
-								<div className='p-2 pr-8 text-right whitespace-pre-wrap bg-blue-800 rounded-lg max-w-max'>test 123</div>
 							</div>
 						</div>
 						<div className='flex items-center p-2 overflow-y-hidden border-t border-gray-900'>
-							<div contentEditable className='w-full p-2 bg-gray-900 rounded-lg max-h-[100px] overflow-y-auto'></div>
+							<div
+								contentEditable
+								className='w-full p-2 bg-gray-900 rounded-lg max-h-[100px] overflow-y-auto'
+							></div>
 						</div>
 					</div>
 				</div>
