@@ -2,7 +2,7 @@ import { FC } from 'react'
 
 interface UserInfoProps {}
 
-const UserInfo: FC<UserInfoProps> = () => {
+const ContactInfo: FC<UserInfoProps> = () => {
 	return (
 		<div className='flex items-center h-16 px-2 border-b border-gray-900'>
 			<div className='flex items-center space-x-2'>
@@ -15,4 +15,4 @@ const UserInfo: FC<UserInfoProps> = () => {
 	)
 }
 
-export default UserInfo
+export default ContactInfo
