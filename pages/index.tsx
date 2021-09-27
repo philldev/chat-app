@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import AccountMenu from '../components/account-menu'
-import Chat from '../components/chat'
+import Chat from '../components/chat/chat'
 import ChatList from '../components/chat-list/chat-list'
 import AppContainer from '../components/layout/app-container'
 import AppLayout from '../components/layout/app-layout'
