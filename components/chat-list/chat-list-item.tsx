@@ -5,7 +5,7 @@ interface ChatListItemProps {}
 
 const ChatListItem: FC<ChatListItemProps> = () => {
 	return (
-		<div className='flex gap-2'>
+		<div className='flex gap-2 cursor-pointer'>
 			<div className='relative flex items-center justify-center w-12 h-12 overflow-hidden text-xs bg-blue-500 rounded-full'>
 				<Image
 					objectFit='cover'
