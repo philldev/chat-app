@@ -1,13 +1,17 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import AccountMenu from '../components/account-menu'
-import Chat from '../components/chat/chat'
+import ChatMessageBox from '../components/chat/chat'
 import ChatList from '../components/chat-list/chat-list'
 import AppContainer from '../components/layout/app-container'
 import AppLayout from '../components/layout/app-layout'
 import Sidebar from '../components/layout/sidebar'
+import { useState } from 'react'
+import Chat from '../types/chat'
 
 const Home: NextPage = () => {
+	const [selectedChat, setSelectedChat] = useState<null | Chat>(null)
+
 	return (
 		<div className='overflow-x-hidden'>
 			<Head>
@@ -19,9 +23,12 @@ const Home: NextPage = () => {
 				<AppContainer>
 					<Sidebar>
 						<AccountMenu />
-						<ChatList />
+						<ChatList onChatSelect={(chat) => setSelectedChat(chat)} />
 					</Sidebar>
-					<Chat />
+					<ChatMessageBox
+						chat={selectedChat}
+						onBackClick={() => setSelectedChat(null)}
+					/>
 				</AppContainer>
 			</AppLayout>
 		</div>

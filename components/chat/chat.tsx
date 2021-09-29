@@ -3,17 +3,27 @@ import ChatContainer from './layout/chat-container'
 import MessageInput from './message-input'
 import Messages from './messages'
 import ContactInfo from './contact-info'
+import Chat from '../../types/chat'
 
-interface ChatProps {}
+interface ChatProps {
+	chat: Chat | null
+	onBackClick: () => void
+}
 
-const Chat: FC<ChatProps> = () => {
+const ChatMessageBox: FC<ChatProps> = (props) => {
 	return (
-		<ChatContainer>
-			<ContactInfo />
-			<Messages />
-			<MessageInput />
+		<ChatContainer showChat={props.chat ? true : false}>
+			{props.chat ? (
+				<>
+					<ContactInfo onBackClick={props.onBackClick} />
+					<Messages />
+					<MessageInput />
+				</>
+			) : (
+				<div>No Chat</div>
+			)}
 		</ChatContainer>
 	)
 }
 
-export default Chat
+export default ChatMessageBox

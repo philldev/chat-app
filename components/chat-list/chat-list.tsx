@@ -1,9 +1,12 @@
 import { FC } from 'react'
+import Chat from '../../types/chat'
 import ChatListItem from './chat-list-item'
 
-interface ChatListProps {}
+interface ChatListProps {
+	onChatSelect: (chat: Chat) => void
+}
 
-const ChatList: FC<ChatListProps> = () => {
+const ChatList: FC<ChatListProps> = (props) => {
 	return (
 		<>
 			<div className='p-2'>
@@ -14,7 +17,12 @@ const ChatList: FC<ChatListProps> = () => {
 					/>
 				</div>
 			</div>
-			<div className='flex flex-col flex-1 p-2 space-y-4 overflow-hidden overflow-y-auto'>
+			<div
+				onClick={() =>
+					props.onChatSelect({ id: '12', messages: [], users: [] })
+				}
+				className='flex flex-col flex-1 p-2 space-y-4 overflow-hidden overflow-y-auto'
+			>
 				{new Array(99).fill(0).map((item, index) => (
 					<ChatListItem key={index} />
 				))}
