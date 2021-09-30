@@ -7,7 +7,7 @@ interface MessagesProps {}
 const Messages: FC<MessagesProps> = () => {
 	return (
 		<MessagesContainer>
-			{new Array(99).fill(0).map((item, index) => (
+			{new Array(10).fill(0).map((item, index) => (
 				<Message
 					type={index % 2 === 0 ? 'incoming-message' : 'user-message'}
 					key={index}

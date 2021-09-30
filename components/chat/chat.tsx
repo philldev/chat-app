@@ -20,7 +20,7 @@ const ChatMessageBox: FC<ChatProps> = (props) => {
 					<MessageInput />
 				</>
 			) : (
-				<div>No Chat</div>
+				<div className="grid place-items-center">No Chat</div>
 			)}
 		</ChatContainer>
 	)

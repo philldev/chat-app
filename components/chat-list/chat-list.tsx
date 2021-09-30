@@ -21,7 +21,7 @@ const ChatList: FC<ChatListProps> = (props) => {
 				onClick={() =>
 					props.onChatSelect({ id: '12', messages: [], users: [] })
 				}
-				className='flex flex-col flex-1 p-2 space-y-4 overflow-hidden overflow-y-auto'
+				className='flex flex-col flex-1 p-4 space-y-4 overflow-hidden overflow-y-auto'
 			>
 				{new Array(99).fill(0).map((item, index) => (
 					<ChatListItem key={index} />
