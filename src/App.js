@@ -1,6 +1,5 @@
 import logo from './logo.svg';
 import './App.css';
-import '@radix-ui/colors/grayDark.css';
 
 function App() {
   return (
