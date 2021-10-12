@@ -1,0 +1,21 @@
+.select-chat {
+	&__wrapper {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+		gap: 8px;
+		padding: 0 16px;
+	}
+
+	&__join {
+		display: flex;
+		width: 100%;
+		align-items: center;
+		gap: 8px;
+		.input {
+			flex: 1 0;
+		}
+	}
+}

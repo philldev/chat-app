@@ -1,13 +1,14 @@
+import { useState } from 'react'
 import './App.scss'
-import { MessageInput } from './MessageInput'
-import { MessageList } from './MessageList'
+import { Chat } from './Chat'
+import { SelectChat } from './SelectChat'
 
 function App() {
+	const [selectedChat, setSelectedChat] = useState(null)
 	return (
 		<div className='app dark-theme'>
-			<div className='container'>
-				<MessageList />
-				<MessageInput />
+			<div className={`app-container ${!selectedChat ? 'app-container__no-chat' : ''}`}>
+				{selectedChat ? <Chat /> : <SelectChat />}
 			</div>
 		</div>
 	)
