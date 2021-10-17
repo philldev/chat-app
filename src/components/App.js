@@ -1,7 +1,10 @@
+import { Box } from "@chakra-ui/layout"
+
 function App() {
 	return (
-		<div>
-		</div>
+		<Box bg='gray.900' h='100vh' w='100vw' color='gray.100'>
+			hello
+		</Box>
 	)
 }
 
