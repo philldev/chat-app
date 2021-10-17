@@ -1,9 +1,10 @@
+import { Button } from "@chakra-ui/button"
 import { Box } from "@chakra-ui/layout"
 
 function App() {
 	return (
-		<Box bg='gray.900' h='100vh' w='100vw' color='gray.100'>
-			hello
+		<Box display='grid' placeItems='center' bg='slate.50' h='100vh' w='100vw' color='slate.900'>
+			<Button colorScheme='slate'>hello</Button>
 		</Box>
 	)
 }
