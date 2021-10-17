@@ -13,7 +13,7 @@ export const appTheme = extendTheme({
 			600: slateDark.slate7,
 			700: slateDark.slate9,
 			800: slateDark.slate10,
-			900: slateDark.slate11,
+			900: slateDark.slate12,
 		},
 	},
 })
