@@ -1,7 +1,9 @@
 import { Avatar } from '@chakra-ui/avatar'
-import { IconButton } from '@chakra-ui/button'
+import { Button, IconButton } from '@chakra-ui/button'
 import { AddIcon } from '@chakra-ui/icons'
 import { Box, Flex, Text } from '@chakra-ui/layout'
+import { ChatItem } from '../components/ChatItem'
+import { Divider } from "@chakra-ui/react"
 
 export const HomePage = () => {
 	return (
@@ -30,8 +32,16 @@ export const HomePage = () => {
 					icon={<AddIcon />}
 				/>
 			</Flex>
-			<Box></Box>
-			<Box></Box>
+			<Box>
+				{new Array(4).fill('').map((_, index) => (
+					<>
+					<ChatItem chatName={'test'} chatAvatarURL={`https://avatars.dicebear.com/api/identicon/${index}.svg`} />
+					</>
+				))}
+			</Box>
+			<Box position='fixed' bottom='0' left='0' w='100%'>
+					<Button colorScheme='slate' w='full' py='8' borderRadius='0' outline='none' boxShadow='none !important'>New Chat</Button>
+			</Box>
 		</Box>
 	)
 }
