@@ -2,6 +2,7 @@ import { extendTheme } from '@chakra-ui/react'
 import { slateDark } from '@radix-ui/colors'
 
 export const appTheme = extendTheme({
+	components: { Button: { baseStyle: { _focus: { boxShadow: 'none' } } } },
 	colors: {
 		slate: {
 			50: slateDark.slate1,
