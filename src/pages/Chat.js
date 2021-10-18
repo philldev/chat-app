@@ -1,7 +1,7 @@
 import { Avatar } from '@chakra-ui/avatar'
 import { Button } from '@chakra-ui/button'
 import { Input } from '@chakra-ui/input'
-import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/layout'
+import { Box, Flex, Text, VStack } from '@chakra-ui/layout'
 
 export const Chat = () => {
 	return (
