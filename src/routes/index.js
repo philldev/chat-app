@@ -1,11 +1,17 @@
 import { Route } from 'react-router'
-import { HomePage } from '../pages'
+import { Chat, HomePage } from '../pages'
 import { auth } from './auth'
 
 const routes = [
 	{
 		component: HomePage,
 		path: '/',
+		exact: true,
+	},
+	{
+
+		component: Chat,
+		path: '/chat/:chatId',
 		exact: true,
 	},
 	...auth,
