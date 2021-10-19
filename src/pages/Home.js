@@ -3,8 +3,10 @@ import { Button, IconButton } from '@chakra-ui/button'
 import { AddIcon } from '@chakra-ui/icons'
 import { Box, Flex, Text } from '@chakra-ui/layout'
 import { Link } from 'react-router-dom'
+import * as React from 'react'
 
 export const HomePage = () => {
+
 	return (
 		<Box w='full' h='full'>
 			<Flex
@@ -35,9 +37,8 @@ export const HomePage = () => {
 			</Flex>
 			<Box>
 				{new Array(4).fill('').map((_, index) => (
-					<Link to={`/chat/${index}`}>
+					<Link key={index} to={`/chat/${index}`}>
 						<ChatItem
-							key={index}
 							chatName={'test'}
 							chatAvatarURL={`https://avatars.dicebear.com/api/identicon/${index}.svg`}
 						/>

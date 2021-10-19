@@ -1,18 +1,13 @@
+import * as React from 'react'
 import { Box } from '@chakra-ui/layout'
 import { BrowserRouter, Switch } from 'react-router-dom'
 import { Routes } from '../routes'
-import * as React from 'react'
 import { Spinner } from '@chakra-ui/spinner'
+import { useAuth } from '../firebase/AuthContext'
 
 function App() {
-	const [isFetchingUser, setIsFetchingUser] = React.useState(true)
-
-	React.useEffect(() => {
-		setTimeout(() => {
-			setIsFetchingUser(false)
-		}, 1000)
-	}, [])
-
+	const { isLoading: isFetchingUser, user } = useAuth()
+	const isLoggedIn = user !== null
 	return (
 		<Box
 			display='grid'
@@ -28,7 +23,7 @@ function App() {
 			) : (
 				<BrowserRouter>
 					<Switch>
-						<Routes />
+						<Routes {...{ isLoggedIn }} />
 					</Switch>
 				</BrowserRouter>
 			)}
