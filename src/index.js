@@ -4,13 +4,16 @@ import App from './components/App'
 import reportWebVitals from './reportWebVitals'
 import { ChakraProvider } from '@chakra-ui/react'
 import { appTheme } from './theme'
+import { AuthProvider } from './firebase/AuthContext'
 
 const ROOT = document.getElementById('root')
 
 ReactDOM.render(
 	<React.StrictMode>
 		<ChakraProvider theme={appTheme}>
-			<App />
+			<AuthProvider>
+				<App />
+			</AuthProvider>
 		</ChakraProvider>
 	</React.StrictMode>,
 	ROOT
