@@ -10,7 +10,7 @@ const AuthContext = React.createContext()
 
 export const AuthProvider = ({ children }) => {
 	const [user, setUser] = React.useState(null)
-	const [isLoading, setIsLoading] = React.useState(false)
+	const [isLoading, setIsLoading] = React.useState(true)
 
 	const signup = async ({ email, password, username }) => {
 		try {
@@ -27,7 +27,9 @@ export const AuthProvider = ({ children }) => {
 			throw error
 		}
 	}
-	const signin = async () => {}
+	const signin = async () => {
+
+	}
 	const signout = async () => {}
 
 	React.useEffect(() => {

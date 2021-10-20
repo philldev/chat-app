@@ -1,3 +1,4 @@
+import React from 'react'
 import { Redirect, Route } from 'react-router'
 import { Chat, HomePage } from '../pages'
 import { auth } from './auth'
@@ -18,16 +19,31 @@ const routes = [
 	...auth,
 ]
 
-const PrivateRoute = ({ isLoggedIn, ...props }) =>
-	isLoggedIn ? <Route {...props} /> : <Redirect to='/login' />
+const PrivateRoute = ({ isLoggedIn, ...props }) => {
+	if (isLoggedIn) {
+		return <Route {...props} />
+	}
+	return <Redirect to='/signup' />
+}
+
+const AuthRoute = ({ isLoggedIn, ...props }) => {
+	if (!isLoggedIn) {
+		return <Route {...props} />
+	}
+	return <Redirect to='/' />
+}
 
 const generateRoutes = (isLoggedIn) =>
-	routes.map(({ exact, component, path, isPrivate }, key) =>
-		!isPrivate ? (
-			<Route {...{ exact, component, path, key }} />
-		) : (
+	routes.map(({ exact, component, path, isPrivate, isAuth }, key) =>
+		isAuth ? (
+			<AuthRoute {...{ exact, component, path, key, isLoggedIn }} />
+		) : isPrivate ? (
 			<PrivateRoute {...{ exact, component, path, key, isLoggedIn }} />
+		) : (
+			<Route {...{ exact, component, path, key }} />
 		)
 	)
 
-export const Routes = ({ isLoggedIn }) => <>{generateRoutes(isLoggedIn)}</>
+export const Routes = ({ isLoggedIn }) => {
+	return <>{generateRoutes(isLoggedIn)}</>
+}
