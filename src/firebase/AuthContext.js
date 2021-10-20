@@ -1,6 +1,7 @@
 import {
 	createUserWithEmailAndPassword,
-	onAuthStateChanged
+	onAuthStateChanged,
+	signOut,
 } from '@firebase/auth'
 import { doc, setDoc } from '@firebase/firestore'
 import * as React from 'react'
@@ -27,10 +28,12 @@ export const AuthProvider = ({ children }) => {
 			throw error
 		}
 	}
-	const signin = async () => {
+	const signin = async () => {}
 
+	const signout = async () => {
+		await signOut(auth)
+		setUser(null)
 	}
-	const signout = async () => {}
 
 	React.useEffect(() => {
 		setIsLoading(true)
@@ -48,7 +51,7 @@ export const AuthProvider = ({ children }) => {
 	}, [])
 
 	return (
-		<AuthContext.Provider value={{ user, isLoading, signup }}>
+		<AuthContext.Provider value={{ user, isLoading, signup, signout }}>
 			{children}
 		</AuthContext.Provider>
 	)

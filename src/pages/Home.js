@@ -1,12 +1,12 @@
 import { Avatar } from '@chakra-ui/avatar'
-import { Button, IconButton } from '@chakra-ui/button'
-import { AddIcon } from '@chakra-ui/icons'
+import { Button } from '@chakra-ui/button'
 import { Box, Flex, Text } from '@chakra-ui/layout'
-import { Link } from 'react-router-dom'
 import * as React from 'react'
+import { Link } from 'react-router-dom'
+import { useAuth } from '../firebase/AuthContext'
 
 export const HomePage = () => {
-
+	const { signout } = useAuth()
 	return (
 		<Box w='full' h='full'>
 			<Flex
@@ -27,13 +27,9 @@ export const HomePage = () => {
 						Dan Abrahmov
 					</Text>
 				</Flex>
-				<IconButton
-					size='lg'
-					title='New Chat'
-					colorScheme='slate'
-					aria-label='Search database'
-					icon={<AddIcon />}
-				/>
+				<Button colorScheme='slate' onClick={signout}>
+					Sign Out
+				</Button>
 			</Flex>
 			<Box>
 				{new Array(4).fill('').map((_, index) => (
