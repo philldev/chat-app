@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
 			const newUser = {
 				id: userCred.user.uid,
 			}
-			await setDoc(doc(db, 'user', newUser.id), newUser)
+			await setDoc(doc(db, 'users', newUser.id), newUser)
 		} catch (error) {
 			throw error
 		}

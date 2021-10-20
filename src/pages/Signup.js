@@ -33,8 +33,13 @@ export const SignupPage = () => {
 	})
 	const { signup } = useAuth()
 
-	const onSubmit = (data) => {
-		console.log(data)
+	const onSubmit = async (data) => {
+		try {
+			await signup(data)
+			console.log('success')
+		} catch (error) {
+			console.log(error)
+		}
 	}
 	return (
 		<Box w='full' h='full' display='grid' placeItems='center'>
@@ -51,7 +56,9 @@ export const SignupPage = () => {
 							type='email'
 							{...register('email')}
 						/>
-						<Text color='red.300' fontSize='xs' mt='1' textAlign='right'>{errors.email?.message}</Text>
+						<Text color='red.300' fontSize='xs' mt='1' textAlign='right'>
+							{errors.email?.message}
+						</Text>
 					</Box>
 					<Box w='full'>
 						<Input
@@ -61,7 +68,9 @@ export const SignupPage = () => {
 							type='text'
 							{...register('username')}
 						/>
-						<Text color='red.300' fontSize='xs' mt='1' textAlign='right'>{errors.username?.message}</Text>
+						<Text color='red.300' fontSize='xs' mt='1' textAlign='right'>
+							{errors.username?.message}
+						</Text>
 					</Box>
 					<Box w='full'>
 						<Input
@@ -71,7 +80,9 @@ export const SignupPage = () => {
 							type='password'
 							{...register('password')}
 						/>
-						<Text color='red.300' fontSize='xs' mt='1' textAlign='right'>{errors.password?.message}</Text>
+						<Text color='red.300' fontSize='xs' mt='1' textAlign='right'>
+							{errors.password?.message}
+						</Text>
 					</Box>
 				</VStack>
 				<Button type='submit' colorScheme='slate' w='full' mb='2'>
