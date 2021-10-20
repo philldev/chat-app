@@ -2,39 +2,83 @@ import { Button } from '@chakra-ui/button'
 import { Input } from '@chakra-ui/input'
 import { Box, Text, VStack } from '@chakra-ui/layout'
 import { Link } from 'react-router-dom'
+import { useAuth } from '../firebase/AuthContext'
+import * as React from 'react'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+
+const schema = yup
+	.object({
+		email: yup.string().required('Email is required').email('Email is invalid'),
+		username: yup
+			.string()
+			.required('Username is required')
+			.min(1, 'Username must be longer than 1 character')
+			.max(25, 'Username cannot be longer than 25 characters'),
+		password: yup
+			.string()
+			.required('Password is required')
+			.min(6, 'Password cannot be longer than 6 characters'),
+	})
+	.required()
 
 export const SignupPage = () => {
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm({
+		resolver: yupResolver(schema),
+	})
+	const { signup } = useAuth()
+
+	const onSubmit = (data) => {
+		console.log(data)
+	}
 	return (
 		<Box w='full' h='full' display='grid' placeItems='center'>
-			<Box maxW='sm' w='full' p='2'>
+			<Box as='form' onSubmit={handleSubmit(onSubmit)} maxW='sm' w='full' p='2'>
 				<Text fontSize='2xl' fontWeight='bold' textAlign='center' mb='4'>
 					Signup
 				</Text>
 				<VStack spacing='2' mb='4'>
-					<Input
-						bg='slate.200'
-						border='none'
-						placeholder='Email'
-						type='email'
-					/>
-					<Input
-						bg='slate.200'
-						border='none'
-						placeholder='Username'
-						type='text'
-					/>
-					<Input
-						bg='slate.200'
-						border='none'
-						placeholder='Password'
-						type='password'
-					/>
+					<Box w='full'>
+						<Input
+							bg='slate.200'
+							border='none'
+							placeholder='Email'
+							type='email'
+							{...register('email')}
+						/>
+						<Text color='red.300' fontSize='xs' mt='1' textAlign='right'>{errors.email?.message}</Text>
+					</Box>
+					<Box w='full'>
+						<Input
+							bg='slate.200'
+							border='none'
+							placeholder='Username'
+							type='text'
+							{...register('username')}
+						/>
+						<Text color='red.300' fontSize='xs' mt='1' textAlign='right'>{errors.username?.message}</Text>
+					</Box>
+					<Box w='full'>
+						<Input
+							bg='slate.200'
+							border='none'
+							placeholder='Password'
+							type='password'
+							{...register('password')}
+						/>
+						<Text color='red.300' fontSize='xs' mt='1' textAlign='right'>{errors.password?.message}</Text>
+					</Box>
 				</VStack>
-				<Button colorScheme='slate' w='full' mb='2'>
+				<Button type='submit' colorScheme='slate' w='full' mb='2'>
 					Create Account
 				</Button>
 				<Text color='slate.800'>
-					Have an account? {" "}
+					Have an account?{' '}
 					<Text as={Link} color='blue.500' to='/login'>
 						Login
 					</Text>
