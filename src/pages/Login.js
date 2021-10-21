@@ -6,14 +6,15 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
 import { useAuth } from '../firebase/AuthContext'
+import { useState } from 'react'
 
 const schema = yup
 	.object({
-		email: yup.string().required('Email is required').email('Email is invalid'),
+		email: yup.string().required('Email is required.').email('Email is invalid.'),
 		password: yup
 			.string()
 			.required('Password is required')
-			.min(6, 'Password cannot be longer than 6 characters'),
+			.min(6, 'Password cannot be longer than 6 characters.'),
 	})
 	.required()
 
@@ -27,12 +28,20 @@ export const LoginPage = () => {
 	})
 	const { signin } = useAuth()
 
+	const [authErr, setAuthErr] = useState(null)
+
 	const onSubmit = async (data) => {
+		setAuthErr(null)
 		try {
 			await signin(data)
-			console.log('success')
 		} catch (error) {
-			console.log(error)
+			const errCode = error.code
+			if (
+				errCode === 'auth/user-not-found' ||
+				errCode === 'auth/wrong-password'
+			) {
+				setAuthErr('Incorrect email or password.')
+			}
 		}
 	}
 
@@ -71,6 +80,9 @@ export const LoginPage = () => {
 				<Button type='submit' colorScheme='slate' w='full' mb='2'>
 					Login
 				</Button>
+				<Text color='red.300' fontSize='xs' mt='1' textAlign='right'>
+					{authErr}
+				</Text>
 				<Text color='slate.800'>
 					Don't have an account?{' '}
 					<Text as={Link} color='blue.500' to='/signup'>

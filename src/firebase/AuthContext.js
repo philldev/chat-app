@@ -34,7 +34,9 @@ export const AuthProvider = ({ children }) => {
 	const signin = async ({ email, password }) => {
 		try {
 			await signInWithEmailAndPassword(auth, email, password)
-		} catch (error) {}
+		} catch (error) {
+			throw error
+		}
 	}
 
 	const signout = async () => {
