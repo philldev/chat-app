@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../firebase/AuthContext'
 
 export const HomePage = () => {
-	const { signout } = useAuth()
+	const { signout, user } = useAuth()
 	return (
 		<Box w='full' h='full'>
 			<Flex
@@ -20,11 +20,11 @@ export const HomePage = () => {
 						<Avatar
 							size='md'
 							name='Dan Abrahmov'
-							src='https://bit.ly/dan-abramov'
+							src={`https://avatars.dicebear.com/api/identicon/${user.username}.svg`}
 						/>
 					</Box>
 					<Text color='slate.900' fontWeight='bold'>
-						Dan Abrahmov
+						{user.username.toUpperCase()}
 					</Text>
 				</Flex>
 				<Button colorScheme='slate' onClick={signout}>

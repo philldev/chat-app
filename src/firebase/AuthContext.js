@@ -4,7 +4,7 @@ import {
 	signInWithEmailAndPassword,
 	signOut,
 } from '@firebase/auth'
-import { doc, setDoc } from '@firebase/firestore'
+import { doc, getDoc, setDoc } from '@firebase/firestore'
 import * as React from 'react'
 import { auth, db } from '.'
 
@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }) => {
 				id: userCred.user.uid,
 				username,
 				email,
+				createdAt: new Date().toISOString(),
 			}
 			await setDoc(doc(db, 'users', newUser.id), newUser)
 		} catch (error) {
@@ -46,9 +47,13 @@ export const AuthProvider = ({ children }) => {
 
 	React.useEffect(() => {
 		setIsLoading(true)
-		const unsub = onAuthStateChanged(auth, (user) => {
+		const unsub = onAuthStateChanged(auth, async (user) => {
 			if (user) {
-				setUser(user)
+				const docRef = doc(db, 'users', user.uid)
+				const docSnap = await getDoc(docRef)
+				if (docSnap.exists()) {
+					setUser(docSnap.data())
+				}
 				setIsLoading(false)
 			} else {
 				setIsLoading(false)
