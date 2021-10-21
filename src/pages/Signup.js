@@ -28,6 +28,7 @@ export const SignupPage = () => {
 		register,
 		handleSubmit,
 		formState: { errors },
+		setError,
 	} = useForm({
 		resolver: yupResolver(schema),
 	})
@@ -36,9 +37,14 @@ export const SignupPage = () => {
 	const onSubmit = async (data) => {
 		try {
 			await signup(data)
-			console.log('success')
 		} catch (error) {
-			console.log(error)
+			if (error.code === 'auth/email-already-in-use') {
+				setError(
+					'email',
+					{ message: 'Email already in use' },
+					{ shouldFocus: true }
+				)
+			}
 		}
 	}
 	return (
