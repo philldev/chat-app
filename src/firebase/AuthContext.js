@@ -1,6 +1,7 @@
 import {
 	createUserWithEmailAndPassword,
 	onAuthStateChanged,
+	signInWithEmailAndPassword,
 	signOut,
 } from '@firebase/auth'
 import { doc, setDoc } from '@firebase/firestore'
@@ -22,13 +23,19 @@ export const AuthProvider = ({ children }) => {
 			)
 			const newUser = {
 				id: userCred.user.uid,
+				username,
+				email,
 			}
 			await setDoc(doc(db, 'users', newUser.id), newUser)
 		} catch (error) {
 			throw error
 		}
 	}
-	const signin = async () => {}
+	const signin = async ({ email, password }) => {
+		try {
+			await signInWithEmailAndPassword(auth, email, password)
+		} catch (error) {}
+	}
 
 	const signout = async () => {
 		await signOut(auth)
@@ -51,7 +58,7 @@ export const AuthProvider = ({ children }) => {
 	}, [])
 
 	return (
-		<AuthContext.Provider value={{ user, isLoading, signup, signout }}>
+		<AuthContext.Provider value={{ user, isLoading, signup, signout, signin }}>
 			{children}
 		</AuthContext.Provider>
 	)
