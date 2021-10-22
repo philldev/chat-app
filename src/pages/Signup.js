@@ -7,6 +7,7 @@ import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { useHistory } from 'react-router-dom'
 
 const schema = yup
 	.object({
@@ -33,10 +34,11 @@ export const SignupPage = () => {
 		resolver: yupResolver(schema),
 	})
 	const { signup } = useAuth()
-
+	const history = useHistory()
 	const onSubmit = async (data) => {
 		try {
 			await signup(data)
+			history.push('/')
 		} catch (error) {
 			if (error.code === 'auth/email-already-in-use') {
 				setError(
