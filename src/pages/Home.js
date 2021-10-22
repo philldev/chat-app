@@ -170,7 +170,7 @@ const ChatList = () => {
 			{chats.map((chat, index) => (
 				<Link key={index} to={`/chat/${chat.id}`}>
 					<ChatItem
-						chatName={chat.name}
+						chatName={chat.name.toUpperCase()}
 						chatAvatarURL={`https://avatars.dicebear.com/api/identicon/${chat.name}.svg`}
 					/>
 				</Link>
