@@ -1,5 +1,5 @@
 import React from 'react'
-import { Redirect, Route } from 'react-router'
+import { Redirect, Route, useLocation } from 'react-router'
 import { Chat, HomePage } from '../pages'
 import { auth } from './auth'
 
@@ -27,10 +27,15 @@ const PrivateRoute = ({ isLoggedIn, ...props }) => {
 }
 
 const AuthRoute = ({ isLoggedIn, ...props }) => {
+	const location = useLocation()
 	if (!isLoggedIn) {
 		return <Route {...props} />
 	}
-	return <Redirect to='/' />
+	return (
+		<Redirect
+			to={location.pathname.includes(props.path) ? '/' : location.pathname}
+		/>
+	)
 }
 
 const generateRoutes = (isLoggedIn) =>
