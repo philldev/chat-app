@@ -1,11 +1,25 @@
 import { Avatar } from '@chakra-ui/avatar'
+import { v4 as uuidv4 } from 'uuid'
 import { Button } from '@chakra-ui/button'
 import { Input } from '@chakra-ui/input'
 import { Box, Flex, Text, VStack } from '@chakra-ui/layout'
-import { doc, getDoc, collection, getDocs } from '@firebase/firestore'
+import {
+	doc,
+	getDoc,
+	collection,
+	getDocs,
+	setDoc,
+	onSnapshot,
+	query,
+	where,
+	Timestamp,
+	orderBy,
+} from '@firebase/firestore'
 import * as React from 'react'
+import { useForm } from 'react-hook-form'
 import { Link, useParams } from 'react-router-dom'
 import { db } from '../firebase'
+import { useAuth } from '../firebase/AuthContext'
 
 const ChatContext = React.createContext(null)
 
@@ -19,14 +33,7 @@ const ChatProvider = ({ children }) => {
 			try {
 				const docRef = doc(db, 'chats', chatId)
 				const docSnap = await getDoc(docRef)
-				const messagesSnap = await getDocs(
-					collection(db, 'chats', chatId, 'messages')
-				)
-				let messages = []
-				messagesSnap.forEach((doc) => {
-					messages = [...messages, doc.data()]
-				})
-				if (mounted) setChat({ ...docSnap.data(), messages })
+				if (mounted) setChat({ ...docSnap.data() })
 			} catch (error) {
 				console.log(error)
 			} finally {
@@ -64,15 +71,31 @@ export const Chat = () => {
 }
 
 const ChatList = () => {
-	const { chat } = useChat()
+	const [messages, setMessages] = React.useState([])
+	const { chatId } = useParams()
+	React.useEffect(() => {
+		const q = query(collection(db, 'chats', chatId, 'messages'), orderBy('createdAt', 'asc'))
+		const unsubscribe = onSnapshot(q, (querySnapshot) => {
+			const messagesDocs = []
+			querySnapshot.forEach((doc) => {
+				messagesDocs.push(doc.data())
+			})
+			console.log(messagesDocs)
+			setMessages(messagesDocs)
+		})
+		return () => {
+			unsubscribe()
+		}
+	}, [chatId])
+
 	return (
 		<VStack flexGrow='1' spacing='4' py='2' overflowY='auto'>
-			{chat.messages?.map((m, index) => (
+			{messages?.map((m, index) => (
 				<MessageItem
 					key={index}
-					username={m.from}
-					avatarURL={`https://avatars.dicebear.com/api/identicon/${m.from}.svg`}
-					message={m.content}
+					username={m?.from}
+					avatarURL={`https://avatars.dicebear.com/api/identicon/${m?.from}.svg`}
+					message={m?.content}
 				/>
 			))}
 		</VStack>
@@ -122,8 +145,27 @@ const ChatHeader = () => {
 }
 
 const MessageInput = () => {
+	const { user } = useAuth()
+	const { chat } = useChat()
+	const { register, handleSubmit, reset } = useForm({})
+	const onSubmit = async (data) => {
+		if (data.content) {
+			const message = {
+				id: uuidv4(),
+				from: user.username,
+				content: data.content,
+				createdAt: Timestamp.fromDate(new Date()),
+			}
+			await setDoc(doc(db, 'chats', chat.id, 'messages', message.id), message)
+			reset()
+			try {
+			} catch (error) {
+				console.log(error.code)
+			}
+		}
+	}
 	return (
-		<Box display='flex'>
+		<Box as='form' onSubmit={handleSubmit(onSubmit)} display='flex'>
 			<Input
 				placeholder='type your message'
 				py='8'
@@ -131,6 +173,8 @@ const MessageInput = () => {
 				bg='slate.300'
 				borderRadius='0'
 				_focus={{ border: 'none' }}
+				autoComplete='off'
+				{...register('content')}
 			/>
 			<Button
 				colorScheme='slate'
@@ -139,6 +183,7 @@ const MessageInput = () => {
 				borderRadius='0'
 				outline='none'
 				boxShadow='none !important'
+				type='submit'
 			>
 				Send
 			</Button>
