@@ -19,6 +19,7 @@ import { useAuth } from '../firebase/AuthContext'
 import { v4 as uuidv4 } from 'uuid'
 import { db } from '../firebase'
 import { doc, setDoc } from '@firebase/firestore'
+import { useHistory } from 'react-router-dom'
 
 export const HomePage = () => {
 	const { signout, user } = useAuth()
@@ -70,6 +71,7 @@ const NewChatBtn = () => {
 		formState: { errors },
 	} = useForm({})
 	const [isLoading, setIsLoading] = React.useState(false)
+	const history = useHistory()
 	const onSubmit = async (data) => {
 		const newChat = {
 			id: uuidv4(),
@@ -81,6 +83,7 @@ const NewChatBtn = () => {
 		try {
 			setIsLoading(true)
 			await setDoc(doc(db, 'chats', newChat.id), newChat)
+			history.push('/chat/' + newChat.id)
 		} catch (error) {
 			console.log(error.code)
 		} finally {
