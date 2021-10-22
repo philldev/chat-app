@@ -18,7 +18,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../firebase/AuthContext'
 import { v4 as uuidv4 } from 'uuid'
 import { db } from '../firebase'
-import { doc, setDoc } from '@firebase/firestore'
+import { arrayUnion, doc, setDoc } from '@firebase/firestore'
 import { useHistory } from 'react-router-dom'
 
 export const HomePage = () => {
@@ -47,16 +47,7 @@ export const HomePage = () => {
 					Sign Out
 				</Button>
 			</Flex>
-			<Box>
-				{new Array(4).fill('').map((_, index) => (
-					<Link key={index} to={`/chat/${index}`}>
-						<ChatItem
-							chatName={'test'}
-							chatAvatarURL={`https://avatars.dicebear.com/api/identicon/${index}.svg`}
-						/>
-					</Link>
-				))}
-			</Box>
+			<ChatList />
 			<NewChatBtn />
 		</Box>
 	)
@@ -83,10 +74,14 @@ const NewChatBtn = () => {
 		try {
 			setIsLoading(true)
 			await setDoc(doc(db, 'chats', newChat.id), newChat)
+			await setDoc(
+				doc(db, 'users', user.id),
+				{ chats: arrayUnion(newChat) },
+				{ merge: true }
+			)
 			history.push('/chat/' + newChat.id)
 		} catch (error) {
 			console.log(error.code)
-		} finally {
 			setIsLoading(false)
 		}
 	}
@@ -138,6 +133,21 @@ const NewChatBtn = () => {
 				</ModalContent>
 			</Modal>
 		</>
+	)
+}
+
+const ChatList = () => {
+	return (
+		<Box>
+			{new Array(4).fill('').map((_, index) => (
+				<Link key={index} to={`/chat/${index}`}>
+					<ChatItem
+						chatName={'test'}
+						chatAvatarURL={`https://avatars.dicebear.com/api/identicon/${index}.svg`}
+					/>
+				</Link>
+			))}
+		</Box>
 	)
 }
 
