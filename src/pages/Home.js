@@ -10,24 +10,22 @@ import {
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-	ModalOverlay,
+	ModalOverlay
 } from '@chakra-ui/modal'
-import * as React from 'react'
-import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
-import { useAuth } from '../firebase/AuthContext'
-import { v4 as uuidv4 } from 'uuid'
-import { db } from '../firebase'
 import {
-	arrayUnion,
 	collection,
 	doc,
 	getDocs,
 	query,
 	setDoc,
-	where,
+	where
 } from '@firebase/firestore'
-import { useHistory } from 'react-router-dom'
+import * as React from 'react'
+import { useForm } from 'react-hook-form'
+import { Link, useHistory } from 'react-router-dom'
+import { v4 as uuidv4 } from 'uuid'
+import { db } from '../firebase'
+import { useAuth } from '../firebase/AuthContext'
 
 export const HomePage = () => {
 	const { signout, user } = useAuth()
