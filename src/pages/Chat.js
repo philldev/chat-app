@@ -4,7 +4,7 @@ import { Input } from '@chakra-ui/input'
 import { Box, Flex, Text, VStack } from '@chakra-ui/layout'
 import { doc, getDoc } from '@firebase/firestore'
 import * as React from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { db } from '../firebase'
 
 const ChatContext = React.createContext(null)
@@ -98,14 +98,16 @@ const ChatHeader = () => {
 					<Avatar
 						size='md'
 						name='chat'
-						src='https://avatars.dicebear.com/api/identicon/1.svg'
+						src={`https://avatars.dicebear.com/api/identicon/${chat?.name}.svg`}
 					/>
 				</Box>
 				<Text color='slate.900' fontWeight='bold'>
 					{chat?.name}
 				</Text>
 			</Flex>
-			<Button colorScheme='slate'>Leave</Button>
+			<Button as={Link} to='/' colorScheme='slate'>
+				Leave
+			</Button>
 		</Flex>
 	)
 }
