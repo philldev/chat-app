@@ -2,7 +2,7 @@ import { Avatar } from '@chakra-ui/avatar'
 import { Button } from '@chakra-ui/button'
 import { Input } from '@chakra-ui/input'
 import { Box, Flex, Text, VStack } from '@chakra-ui/layout'
-import { doc, getDoc } from '@firebase/firestore'
+import { doc, getDoc, collection, getDocs } from '@firebase/firestore'
 import * as React from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { db } from '../firebase'
@@ -19,7 +19,14 @@ const ChatProvider = ({ children }) => {
 			try {
 				const docRef = doc(db, 'chats', chatId)
 				const docSnap = await getDoc(docRef)
-				if (mounted) setChat(docSnap.data())
+				const messagesSnap = await getDocs(
+					collection(db, 'chats', chatId, 'messages')
+				)
+				let messages = []
+				messagesSnap.forEach((doc) => {
+					messages = [...messages, doc.data()]
+				})
+				if (mounted) setChat({ ...docSnap.data(), messages })
 			} catch (error) {
 				console.log(error)
 			} finally {
@@ -57,15 +64,17 @@ export const Chat = () => {
 }
 
 const ChatList = () => {
+	const { chat } = useChat()
 	return (
 		<VStack flexGrow='1' spacing='4' py='2' overflowY='auto'>
-			<MessageItem
-				username='Dan Abrahmov'
-				avatarURL='https://bit.ly/dan-abramov'
-				message={`
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-				`}
-			/>
+			{chat.messages?.map((m, index) => (
+				<MessageItem
+					key={index}
+					username={m.from}
+					avatarURL={`https://avatars.dicebear.com/api/identicon/${m.from}.svg`}
+					message={m.content}
+				/>
+			))}
 		</VStack>
 	)
 }
