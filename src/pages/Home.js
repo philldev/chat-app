@@ -18,7 +18,15 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../firebase/AuthContext'
 import { v4 as uuidv4 } from 'uuid'
 import { db } from '../firebase'
-import { arrayUnion, doc, setDoc } from '@firebase/firestore'
+import {
+	arrayUnion,
+	collection,
+	doc,
+	getDocs,
+	query,
+	setDoc,
+	where,
+} from '@firebase/firestore'
 import { useHistory } from 'react-router-dom'
 
 export const HomePage = () => {
@@ -66,19 +74,14 @@ const NewChatBtn = () => {
 	const onSubmit = async (data) => {
 		const newChat = {
 			id: uuidv4(),
-			owner: user,
+			ownerId: user.id,
 			name: data.chatName,
-			users: [user],
+			usersId: [user.id],
 			messages: [],
 		}
 		try {
 			setIsLoading(true)
 			await setDoc(doc(db, 'chats', newChat.id), newChat)
-			await setDoc(
-				doc(db, 'users', user.id),
-				{ chats: arrayUnion(newChat) },
-				{ merge: true }
-			)
 			history.push('/chat/' + newChat.id)
 		} catch (error) {
 			console.log(error.code)
@@ -137,13 +140,38 @@ const NewChatBtn = () => {
 }
 
 const ChatList = () => {
+	const { user } = useAuth()
+	const [chats, setChats] = React.useState([])
+
+	React.useEffect(() => {
+		let mounted = true
+		const getChats = async () => {
+			const q = query(
+				collection(db, 'chats'),
+				where('usersId', 'array-contains', user.id)
+			)
+
+			const querySnap = await getDocs(q)
+			let chatsFromDoc = []
+			querySnap.forEach((d) => {
+				chatsFromDoc = [...chatsFromDoc, d.data()]
+			})
+			if (mounted) setChats(chatsFromDoc)
+		}
+		getChats()
+
+		return () => {
+			mounted = false
+		}
+	}, [user.id])
+
 	return (
 		<Box>
-			{new Array(4).fill('').map((_, index) => (
-				<Link key={index} to={`/chat/${index}`}>
+			{chats.map((chat, index) => (
+				<Link key={index} to={`/chat/${chat.id}`}>
 					<ChatItem
-						chatName={'test'}
-						chatAvatarURL={`https://avatars.dicebear.com/api/identicon/${index}.svg`}
+						chatName={chat.name}
+						chatAvatarURL={`https://avatars.dicebear.com/api/identicon/${chat.name}.svg`}
 					/>
 				</Link>
 			))}
