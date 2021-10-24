@@ -1,23 +1,23 @@
 import { Avatar } from '@chakra-ui/avatar'
-import { v4 as uuidv4 } from 'uuid'
 import { Button } from '@chakra-ui/button'
 import { Input } from '@chakra-ui/input'
 import { Box, Flex, Text, VStack } from '@chakra-ui/layout'
 import {
+	arrayUnion,
+	collection,
 	doc,
 	getDoc,
-	collection,
-	getDocs,
-	setDoc,
 	onSnapshot,
-	query,
-	where,
-	Timestamp,
 	orderBy,
+	query,
+	setDoc,
+	Timestamp,
+	updateDoc,
 } from '@firebase/firestore'
 import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useParams } from 'react-router-dom'
+import { v4 as uuidv4 } from 'uuid'
 import { db } from '../firebase'
 import { useAuth } from '../firebase/AuthContext'
 
@@ -27,6 +27,21 @@ const ChatProvider = ({ children }) => {
 	const [chat, setChat] = React.useState(null)
 	const [isLoading, setIsLoading] = React.useState(true)
 	const { chatId } = useParams()
+	const { user } = useAuth()
+	const isMember = chat?.usersId?.some((ids) => ids === user?.id)
+	const joinChat = async () => {
+		const docRef = doc(db, 'chats', chatId)
+		let prevData = [...chat?.usersId]
+		try {
+			setChat((p) => ({ ...p, usersId: [...p.usersId, user.id] }))
+			await updateDoc(docRef, {
+				usersId: arrayUnion(user?.id),
+			})
+		} catch (error) {
+			setChat((p) => ({ ...p, usersId: prevData }))
+			console.log(error.code)
+		}
+	}
 	React.useEffect(() => {
 		let mounted = true
 		const getChat = async () => {
@@ -46,7 +61,7 @@ const ChatProvider = ({ children }) => {
 		}
 	}, [chatId])
 	return (
-		<ChatContext.Provider value={{ chat, isLoading }}>
+		<ChatContext.Provider value={{ chat, isLoading, isMember, joinChat }}>
 			{children}
 		</ChatContext.Provider>
 	)
@@ -74,13 +89,15 @@ const ChatList = () => {
 	const [messages, setMessages] = React.useState([])
 	const { chatId } = useParams()
 	React.useEffect(() => {
-		const q = query(collection(db, 'chats', chatId, 'messages'), orderBy('createdAt', 'asc'))
+		const q = query(
+			collection(db, 'chats', chatId, 'messages'),
+			orderBy('createdAt', 'asc')
+		)
 		const unsubscribe = onSnapshot(q, (querySnapshot) => {
 			const messagesDocs = []
 			querySnapshot.forEach((doc) => {
 				messagesDocs.push(doc.data())
 			})
-			console.log(messagesDocs)
 			setMessages(messagesDocs)
 		})
 		return () => {
@@ -146,7 +163,7 @@ const ChatHeader = () => {
 
 const MessageInput = () => {
 	const { user } = useAuth()
-	const { chat } = useChat()
+	const { chat, isMember, joinChat } = useChat()
 	const { register, handleSubmit, reset } = useForm({})
 	const onSubmit = async (data) => {
 		if (data.content) {
@@ -164,6 +181,21 @@ const MessageInput = () => {
 			}
 		}
 	}
+	if (chat === null) return null
+	if (!isMember)
+		return (
+			<Box display='flex'>
+				<Button
+					colorScheme='green'
+					w='full'
+					borderRadius='0'
+					py='8'
+					onClick={joinChat}
+				>
+					Join
+				</Button>
+			</Box>
+		)
 	return (
 		<Box as='form' onSubmit={handleSubmit(onSubmit)} display='flex'>
 			<Input
