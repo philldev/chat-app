@@ -14,6 +14,10 @@ export const appTheme = extendTheme({
 			},
 		},
 	},
+	 fonts: {
+    heading: "Poppins",
+    body: "Poppins",
+  },
 	colors: {
 		slate: {
 			50: slateDark.slate1,
