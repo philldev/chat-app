@@ -104,6 +104,15 @@ const ChatList = () => {
 			unsubscribe()
 		}
 	}, [chatId])
+	const ref = React.useRef(null)
+	const gotoBottom = () => {
+		const element = ref.current
+		element.scrollIntoView()
+	}
+
+	React.useEffect(() => {
+		if (messages.length > 0) gotoBottom()
+	}, [messages])
 
 	return (
 		<VStack flexGrow='1' spacing='4' py='2' overflowY='auto'>
@@ -115,6 +124,7 @@ const ChatList = () => {
 					message={m?.content}
 				/>
 			))}
+			<div ref={ref} />
 		</VStack>
 	)
 }
