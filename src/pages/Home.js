@@ -10,7 +10,7 @@ import {
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-	ModalOverlay
+	ModalOverlay,
 } from '@chakra-ui/modal'
 import {
 	collection,
@@ -18,7 +18,7 @@ import {
 	getDocs,
 	query,
 	setDoc,
-	where
+	where,
 } from '@firebase/firestore'
 import * as React from 'react'
 import { useForm } from 'react-hook-form'
@@ -98,7 +98,7 @@ const NewChatBtn = () => {
 					boxShadow='none !important'
 					onClick={onOpen}
 				>
-					New Chat
+					Create Room +
 				</Button>
 			</Box>
 			<Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -148,7 +148,6 @@ const ChatList = () => {
 				collection(db, 'chats'),
 				where('usersId', 'array-contains', user.id)
 			)
-
 			const querySnap = await getDocs(q)
 			let chatsFromDoc = []
 			querySnap.forEach((d) => {
