@@ -145,17 +145,17 @@ const ChatHeader = () => {
 			<Flex alignItems='center'>
 				<Box as='button' mr='4'>
 					<Avatar
-						size='md'
+						size='sm'
 						name='chat'
 						src={`https://avatars.dicebear.com/api/identicon/${chat?.name}.svg`}
 					/>
 				</Box>
-				<Text color='slate.900' fontWeight='bold'>
+				<Text color='slate.900' fontWeight='bold' fontSize='xl'>
 					{chat?.name}
 				</Text>
 			</Flex>
 			<Button as={Link} to='/' colorScheme='slate'>
-				Leave
+				Back
 			</Button>
 		</Flex>
 	)
