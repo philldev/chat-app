@@ -110,14 +110,14 @@ const NewChatBtn = () => {
 					color='slate.900'
 					onSubmit={handleSubmit(onSubmit)}
 				>
-					<ModalHeader>New Chat</ModalHeader>
+					<ModalHeader>New Room</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
 						<Box w='full'>
 							<Input
 								bg='slate.200'
 								border='none'
-								placeholder='Enter chat name'
+								placeholder='Enter room name'
 								{...register('chatName', { required: true })}
 							/>
 							<Text color='red.300' fontSize='xs' mt='1' textAlign='right'>
@@ -128,7 +128,7 @@ const NewChatBtn = () => {
 					</ModalBody>
 					<ModalFooter justifyContent='center'>
 						<Button colorScheme='slate' mr={3} type='submit' {...{ isLoading }}>
-							Create chat
+							Create Room
 						</Button>
 					</ModalFooter>
 				</ModalContent>
