@@ -1,7 +1,9 @@
 import { Avatar } from '@chakra-ui/avatar'
 import { Button } from '@chakra-ui/button'
+import { CopyIcon } from '@chakra-ui/icons'
 import { Input } from '@chakra-ui/input'
 import { Box, Flex, Text, VStack } from '@chakra-ui/layout'
+import { useToast } from '@chakra-ui/toast'
 import {
 	arrayUnion,
 	collection,
@@ -145,6 +147,16 @@ const MessageItem = ({ username, avatarURL, message }) => {
 
 const ChatHeader = () => {
 	const { chat } = useChat()
+	const toast = useToast()
+	const copyRoomIdToClipboard = () => {
+		navigator.clipboard.writeText(chat?.id)
+		toast({
+			title: 'Room id copied',
+			status: 'success',
+			duration: 2000,
+			isClosable: true,
+		})
+	}
 	return (
 		<Flex
 			p='4'
@@ -160,9 +172,20 @@ const ChatHeader = () => {
 						src={`https://avatars.dicebear.com/api/identicon/${chat?.name}.svg`}
 					/>
 				</Box>
-				<Text color='slate.900' fontWeight='bold' fontSize='xl'>
-					{chat?.name}
-				</Text>
+				<Box>
+					<Text color='slate.900' fontWeight='bold' fontSize='xl'>
+						{chat?.name}
+					</Text>
+					<Text
+						cursor='pointer'
+						onClick={copyRoomIdToClipboard}
+						title='Copy room id'
+						color='slate.900'
+						fontSize='sm'
+					>
+						Room ID : {chat?.id} <CopyIcon />
+					</Text>
+				</Box>
 			</Flex>
 			<Button as={Link} to='/' colorScheme='slate'>
 				Back
