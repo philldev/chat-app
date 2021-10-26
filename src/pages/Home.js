@@ -40,7 +40,7 @@ export const HomePage = () => {
 				<Flex alignItems='center'>
 					<Box as='button' mr='4'>
 						<Avatar
-							size='md'
+							size='sm'
 							name={user.username}
 							src={`https://avatars.dicebear.com/api/identicon/${user.username}.svg`}
 						/>
