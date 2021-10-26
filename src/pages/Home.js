@@ -1,6 +1,7 @@
 import { Avatar } from '@chakra-ui/avatar'
 import { Button } from '@chakra-ui/button'
 import { useDisclosure } from '@chakra-ui/hooks'
+import { CopyIcon } from '@chakra-ui/icons'
 import { Input } from '@chakra-ui/input'
 import { Box, Flex, Text } from '@chakra-ui/layout'
 import {
@@ -12,6 +13,7 @@ import {
 	ModalHeader,
 	ModalOverlay,
 } from '@chakra-ui/modal'
+import { useToast } from '@chakra-ui/toast'
 import {
 	collection,
 	doc,
@@ -167,6 +169,7 @@ const ChatList = () => {
 			{chats.map((chat, index) => (
 				<Link key={index} to={`/chat/${chat.id}`}>
 					<ChatItem
+						chatId={chat.id}
 						chatName={chat.name.toUpperCase()}
 						chatAvatarURL={`https://avatars.dicebear.com/api/identicon/${chat.name}.svg`}
 					/>
@@ -176,13 +179,34 @@ const ChatList = () => {
 	)
 }
 
-const ChatItem = ({ chatName, chatAvatarURL }) => {
+const ChatItem = ({ chatName, chatAvatarURL, chatId }) => {
+	const toast = useToast()
+	const copyRoomIdToClipboard = () => {
+		navigator.clipboard.writeText(chatId)
+		toast({
+			title: 'Room id copied',
+			status: 'success',
+			duration: 2000,
+			isClosable: true,
+		})
+	}
 	return (
 		<Box display='flex' p={4} cursor='pointer' _hover={{ bg: 'slate.200' }}>
 			<Avatar name={chatName} src={chatAvatarURL} mr={4} />
-			<Text fontSize='xl' fontWeight='bold'>
-				{chatName}
-			</Text>
+			<Box>
+				<Text fontSize='xl' fontWeight='bold'>
+					{chatName}
+				</Text>
+				<Text
+					cursor='pointer'
+					onClick={copyRoomIdToClipboard}
+					title='Copy room id'
+					color='slate.900'
+					fontSize='sm'
+				>
+					Room ID : {chatId} <CopyIcon />
+				</Text>
+			</Box>
 		</Box>
 	)
 }
