@@ -6,9 +6,18 @@ import { useDisclosure } from '@chakra-ui/hooks'
 import { useForm } from 'react-hook-form'
 import { Box, Flex, Text, VStack } from '@chakra-ui/layout'
 import { Avatar } from '@chakra-ui/avatar'
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
+import {
+	Modal,
+	ModalBody,
+	ModalCloseButton,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	ModalOverlay,
+} from '@chakra-ui/modal'
 import { Input } from '@chakra-ui/input'
 import { Button } from '@chakra-ui/button'
+import { SearchIcon } from '@chakra-ui/icons'
 
 const schema = yup.object({
 	email: yup.string().required('Email is required').email('Email is invalid'),
@@ -34,7 +43,7 @@ export const Header = () => {
 		},
 	})
 	const [usernameDisabled, setUsernameDisabled] = React.useState(true)
-	const toggleUsernameDisabled = () => setUsernameDisabled(p => !p)
+	const toggleUsernameDisabled = () => setUsernameDisabled((p) => !p)
 	const [isLoading, setIsLoading] = React.useState(false)
 	const onSubmit = (data) => {}
 	return (
@@ -57,6 +66,16 @@ export const Header = () => {
 						{user.username.toUpperCase()}
 					</Text>
 				</Flex>
+
+				<Box position='relative'>
+					<Input
+						maxW='250px'
+						bg='slate.200'
+						border='none'
+						placeholder='Search Room by id'
+					/>
+					<SearchIcon position='absolute' right='2' top='3' color='slate.800' />
+				</Box>
 			</Flex>
 			<Modal isOpen={isOpen} onClose={onClose} isCentered>
 				<ModalOverlay />
@@ -107,8 +126,9 @@ export const Header = () => {
 						{/* <Button colorScheme='slate' type='submit' {...{ isLoading }}>
 							Update Profile
 						</Button> */}
-						<Button colorScheme='slate' onClick={onClose}>Back</Button>
-						
+						<Button colorScheme='slate' onClick={onClose}>
+							Back
+						</Button>
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
