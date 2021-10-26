@@ -33,6 +33,8 @@ export const Header = () => {
 			email: user.email,
 		},
 	})
+	const [usernameDisabled, setUsernameDisabled] = React.useState(true)
+	const toggleUsernameDisabled = () => setUsernameDisabled(p => !p)
 	const [isLoading, setIsLoading] = React.useState(false)
 	const onSubmit = (data) => {}
 	return (
@@ -75,11 +77,13 @@ export const Header = () => {
 									bg='slate.200'
 									border='none'
 									placeholder='Username'
+									disabled={usernameDisabled}
 									{...register('username', { required: true })}
 								/>
 								<Text color='red.300' fontSize='xs' mt='1' textAlign='right'>
 									{errors.username?.message}
 								</Text>
+								{/* <Button variant='link' fontSize='xs' mt='1' color='slate.900' alignSelf='flex-end' onClick={toggleUsernameDisabled} >{ usernameDisabled ? "Change username" : "Cancel"}</Button> */}
 							</VStack>
 							<VStack spacing='1' alignItems='flex-start' w='full'>
 								<Text fontSize='sm'>Email</Text>
@@ -87,6 +91,7 @@ export const Header = () => {
 									bg='slate.200'
 									border='none'
 									placeholder='Email'
+									disabled
 									{...register('email', { required: true })}
 								/>
 								<Text color='red.300' fontSize='xs' mt='1' textAlign='right'>
@@ -94,14 +99,16 @@ export const Header = () => {
 								</Text>
 							</VStack>
 						</VStack>
-						<Button colorScheme='red' onClick={signout}>
+						<Button colorScheme='red' variant='link' onClick={signout}>
 							Sign Out
 						</Button>
 					</ModalBody>
 					<ModalFooter justifyContent='center'>
-						<Button colorScheme='slate' mr={3} type='submit' {...{ isLoading }}>
+						{/* <Button colorScheme='slate' type='submit' {...{ isLoading }}>
 							Update Profile
-						</Button>
+						</Button> */}
+						<Button colorScheme='slate' onClick={onClose}>Back</Button>
+						
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
