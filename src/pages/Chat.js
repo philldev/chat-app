@@ -17,9 +17,9 @@ import {
 import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useParams } from 'react-router-dom'
-import { v4 as uuidv4 } from 'uuid'
 import { db } from '../firebase'
 import { useAuth } from '../firebase/AuthContext'
+import { createId } from '../utils/createId'
 
 const ChatContext = React.createContext(null)
 
@@ -178,7 +178,7 @@ const MessageInput = () => {
 	const onSubmit = async (data) => {
 		if (data.content) {
 			const message = {
-				id: uuidv4(),
+				id: createId(),
 				from: user.username,
 				content: data.content,
 				createdAt: Timestamp.fromDate(new Date()),

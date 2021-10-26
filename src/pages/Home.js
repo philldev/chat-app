@@ -23,9 +23,9 @@ import {
 import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useHistory } from 'react-router-dom'
-import { v4 as uuidv4 } from 'uuid'
 import { db } from '../firebase'
 import { useAuth } from '../firebase/AuthContext'
+import { createId } from '../utils/createId'
 
 export const HomePage = () => {
 	const { signout, user } = useAuth()
@@ -71,7 +71,7 @@ const NewChatBtn = () => {
 	const history = useHistory()
 	const onSubmit = async (data) => {
 		const newChat = {
-			id: uuidv4(),
+			id: createId(),
 			ownerId: user.id,
 			name: data.chatName,
 			usersId: [user.id],
