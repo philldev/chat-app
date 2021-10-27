@@ -25,8 +25,13 @@ import { createId } from '../utils/createId'
 
 const ChatContext = React.createContext(null)
 
+const ErrorType = {
+	notExist: 'not-exist',
+}
+
 const ChatProvider = ({ children }) => {
 	const [chat, setChat] = React.useState(null)
+	const [error, setError] = React.useState(null)
 	const [isLoading, setIsLoading] = React.useState(true)
 	const { chatId } = useParams()
 	const { user } = useAuth()
@@ -50,7 +55,8 @@ const ChatProvider = ({ children }) => {
 			try {
 				const docRef = doc(db, 'chats', chatId)
 				const docSnap = await getDoc(docRef)
-				if (mounted) setChat({ ...docSnap.data() })
+				if (docSnap.exists() && mounted) setChat({ ...docSnap.data() })
+				if (!docSnap.exists() && mounted) setError(ErrorType.notExist)
 			} catch (error) {
 				console.log(error)
 			} finally {
@@ -63,7 +69,9 @@ const ChatProvider = ({ children }) => {
 		}
 	}, [chatId])
 	return (
-		<ChatContext.Provider value={{ chat, isLoading, isMember, joinChat }}>
+		<ChatContext.Provider
+			value={{ chat, isLoading, isMember, joinChat, error }}
+		>
 			{children}
 		</ChatContext.Provider>
 	)
@@ -146,7 +154,7 @@ const MessageItem = ({ username, avatarURL, message }) => {
 }
 
 const ChatHeader = () => {
-	const { chat } = useChat()
+	const { chat, error } = useChat()
 	const toast = useToast()
 	const copyRoomIdToClipboard = () => {
 		navigator.clipboard.writeText(chat?.id)
@@ -163,30 +171,34 @@ const ChatHeader = () => {
 			borderBottom='1px solid'
 			borderColor='slate.500'
 			justifyContent='space-between'
+			alignItems='center'
 		>
-			<Flex alignItems='center'>
-				<Box as='button' mr='4'>
-					<Avatar
-						size='sm'
-						name='chat'
-						src={`https://avatars.dicebear.com/api/identicon/${chat?.name}.svg`}
-					/>
-				</Box>
-				<Box>
-					<Text color='slate.900' fontWeight='bold' fontSize='xl'>
-						{chat?.name}
-					</Text>
-					<Text
-						cursor='pointer'
-						onClick={copyRoomIdToClipboard}
-						title='Copy room id'
-						color='slate.900'
-						fontSize='sm'
-					>
-						Room ID : {chat?.id} <CopyIcon />
-					</Text>
-				</Box>
-			</Flex>
+			{chat && (
+				<Flex alignItems='center'>
+					<Box as='button' mr='4'>
+						<Avatar
+							size='sm'
+							name='chat'
+							src={`https://avatars.dicebear.com/api/identicon/${chat?.name}.svg`}
+						/>
+					</Box>
+					<Box>
+						<Text color='slate.900' fontWeight='bold' fontSize='xl'>
+							{chat?.name}
+						</Text>
+						<Text
+							cursor='pointer'
+							onClick={copyRoomIdToClipboard}
+							title='Copy room id'
+							color='slate.900'
+							fontSize='sm'
+						>
+							Room ID : {chat?.id} <CopyIcon />
+						</Text>
+					</Box>
+				</Flex>
+			)}
+			{error === ErrorType.notExist && <Text>Chat Room not found!</Text>}
 			<Button as={Link} to='/' colorScheme='slate'>
 				Back
 			</Button>
@@ -196,7 +208,7 @@ const ChatHeader = () => {
 
 const MessageInput = () => {
 	const { user } = useAuth()
-	const { chat, isMember, joinChat } = useChat()
+	const { chat, isMember, joinChat, error } = useChat()
 	const { register, handleSubmit, reset } = useForm({})
 	const onSubmit = async (data) => {
 		if (data.content) {
@@ -214,7 +226,7 @@ const MessageInput = () => {
 			}
 		}
 	}
-	if (chat === null) return null
+	if (error === ErrorType.notExist) return null
 	if (!isMember)
 		return (
 			<Box display='flex'>
