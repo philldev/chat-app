@@ -18,6 +18,7 @@ import {
 import { Input } from '@chakra-ui/input'
 import { Button } from '@chakra-ui/button'
 import { SearchIcon } from '@chakra-ui/icons'
+import { useHistory } from 'react-router'
 
 const schema = yup.object({
 	email: yup.string().required('Email is required').email('Email is invalid'),
@@ -67,15 +68,7 @@ export const Header = () => {
 					</Text>
 				</Flex>
 
-				<Box position='relative'>
-					<Input
-						maxW='250px'
-						bg='slate.200'
-						border='none'
-						placeholder='Search Room by id'
-					/>
-					<SearchIcon position='absolute' right='2' top='3' color='slate.800' />
-				</Box>
+				<SearchBox />
 			</Flex>
 			<Modal isOpen={isOpen} onClose={onClose} isCentered>
 				<ModalOverlay />
@@ -133,5 +126,29 @@ export const Header = () => {
 				</ModalContent>
 			</Modal>
 		</>
+	)
+}
+
+const SearchBox = () => {
+	const [roomId, setRoomId] = React.useState('')
+	const history = useHistory()
+	const onSubmit = (e) => {
+		e.preventDefault()
+		if(roomId) {
+			history.push('/chat/' + roomId)
+		}
+	}
+	return (
+		<Box as='form' onSubmit={onSubmit} position='relative'>
+			<Input
+				maxW='250px'
+				bg='slate.200'
+				border='none'
+				placeholder='Search Room by id'
+				value={roomId}
+				onChange={(e) => setRoomId(e.target.value)}
+			/>
+			<SearchIcon position='absolute' right='2' top='3' color='slate.800' />
+		</Box>
 	)
 }
