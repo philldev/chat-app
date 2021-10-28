@@ -47,6 +47,7 @@ export const ChatHeader = () => {
 						<Box as='button' mr='4' onClick={onChatSettingsOpen}>
 							<Avatar
 								size='sm'
+								borderRadius='4'
 								name='chat'
 								src={`https://avatars.dicebear.com/api/identicon/${chat?.name}.svg`}
 							/>
@@ -94,6 +95,7 @@ const ChatSettings = ({ isOpen, onClose }) => {
 					<Flex alignItems='center'>
 						<Box mr='4'>
 							<Avatar
+								borderRadius='4'
 								name='chat'
 								src={`https://avatars.dicebear.com/api/identicon/${chat?.name}.svg`}
 							/>

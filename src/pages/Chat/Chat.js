@@ -4,6 +4,7 @@ import {
 	deleteDoc,
 	doc,
 	getDoc,
+	Timestamp,
 	updateDoc,
 } from '@firebase/firestore'
 import * as React from 'react'
@@ -29,6 +30,7 @@ const ChatProvider = ({ children }) => {
 	const { user } = useAuth()
 	const isMember = chat?.usersId?.some((ids) => ids === user?.id)
 	const history = useHistory()
+
 	const deleteChat = async () => {
 		if (user?.id === chat?.ownerId) {
 			try {
@@ -64,6 +66,7 @@ const ChatProvider = ({ children }) => {
 			console.log(error.code)
 		}
 	}
+
 	React.useEffect(() => {
 		let mounted = true
 		const getChat = async () => {
@@ -99,8 +102,19 @@ const ChatProvider = ({ children }) => {
 		getChat()
 		return () => {
 			mounted = false
+			const setLastSeen = async () => {
+				try {
+					let chatRef = doc(db, 'chats', chatId)
+					await updateDoc(chatRef, {
+						[`usersLastSeen.${user?.id}`]: Timestamp.now().toMillis(),
+					})
+				} catch (error) {
+					console.log(error.code)
+				}
+			}
+			setLastSeen()
 		}
-	}, [chatId])
+	}, [chatId, user?.id])
 	return (
 		<ChatContext.Provider
 			value={{

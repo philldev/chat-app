@@ -51,7 +51,7 @@ export const SignupPage = () => {
 	}
 	return (
 		<Box w='full' h='full' display='grid' placeItems='center'>
-			<Box as='form' onSubmit={handleSubmit(onSubmit)} maxW='sm' w='full' p='2'>
+			<Box as='form' onSubmit={handleSubmit(onSubmit)} maxW='sm' w='full' boxShadow='2xl' >
 				<Text fontSize='2xl' fontWeight='bold' textAlign='center' mb='4'>
 					Signup
 				</Text>

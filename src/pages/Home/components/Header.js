@@ -59,6 +59,7 @@ export const Header = () => {
 					<Box as='button' mr='4'>
 						<Avatar
 							size='sm'
+							borderRadius='4'
 							name={user.username}
 							src={`https://avatars.dicebear.com/api/identicon/${user.username}.svg`}
 						/>
@@ -84,6 +85,14 @@ export const Header = () => {
 					<ModalBody>
 						<VStack spacing='2' mb='4'>
 							<VStack spacing='1' alignItems='flex-start' w='full'>
+								<Flex justifyContent='center' w='full' mb='4'>
+									<Avatar
+										size='lg'
+										borderRadius='4'
+										name={user.username}
+										src={`https://avatars.dicebear.com/api/identicon/${user.username}.svg`}
+									/>
+								</Flex>
 								<Text fontSize='sm'>Username</Text>
 								<Input
 									bg='slate.200'
@@ -134,7 +143,7 @@ const SearchBox = () => {
 	const history = useHistory()
 	const onSubmit = (e) => {
 		e.preventDefault()
-		if(roomId) {
+		if (roomId) {
 			history.push('/chat/' + roomId)
 		}
 	}

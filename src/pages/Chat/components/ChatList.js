@@ -1,6 +1,10 @@
 import { Avatar } from '@chakra-ui/avatar'
 import { Flex, Text, VStack } from '@chakra-ui/layout'
-import { collection, onSnapshot, orderBy, query } from '@firebase/firestore'
+import {
+	collection, onSnapshot,
+	orderBy,
+	query
+} from '@firebase/firestore'
 import * as React from 'react'
 import { useParams } from 'react-router'
 import { db } from '../../../firebase'
@@ -52,7 +56,7 @@ export const ChatList = () => {
 const MessageItem = ({ username, avatarURL, message }) => {
 	return (
 		<Flex w='full' px='4'>
-			<Avatar name='Dan Abrahmov' src={avatarURL} mr='4' />
+			<Avatar borderRadius='4' name='Dan Abrahmov' src={avatarURL} mr='4' />
 			<VStack spacing='2' alignItems='start'>
 				<Text fontWeight='bold'>{username}</Text>
 				<Text p='2' bg='slate.200' borderRadius='lg'>

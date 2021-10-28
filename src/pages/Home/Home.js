@@ -3,7 +3,7 @@ import { Button } from '@chakra-ui/button'
 import { useDisclosure } from '@chakra-ui/hooks'
 import { CopyIcon } from '@chakra-ui/icons'
 import { Input } from '@chakra-ui/input'
-import { Box, Text } from '@chakra-ui/layout'
+import { Box, Flex, Text } from '@chakra-ui/layout'
 import {
 	Modal,
 	ModalBody,
@@ -11,16 +11,18 @@ import {
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-	ModalOverlay
+	ModalOverlay,
 } from '@chakra-ui/modal'
 import { useToast } from '@chakra-ui/toast'
 import {
 	collection,
 	doc,
 	getDocs,
+	limit,
 	query,
 	setDoc,
-	where
+	Timestamp,
+	where,
 } from '@firebase/firestore'
 import * as React from 'react'
 import { useForm } from 'react-hook-form'
@@ -39,7 +41,6 @@ export const HomePage = () => {
 		</Box>
 	)
 }
-
 
 const NewChatBtn = () => {
 	const { user } = useAuth()
@@ -153,16 +154,18 @@ const ChatList = () => {
 						chatId={chat.id}
 						chatName={chat.name.toUpperCase()}
 						chatAvatarURL={`https://avatars.dicebear.com/api/identicon/${chat.name}.svg`}
+						usersLastSeen={chat.usersLastSeen}
 					/>
 				</Link>
 			))}
-			
 		</Box>
 	)
 }
 
-const ChatItem = ({ chatName, chatAvatarURL, chatId }) => {
+const ChatItem = ({ chatName, chatAvatarURL, chatId, usersLastSeen }) => {
 	const toast = useToast()
+	const { user } = useAuth()
+	const [unreadMessage, setUnreadMessage] = React.useState(null)
 	const copyRoomIdToClipboard = () => {
 		navigator.clipboard.writeText(chatId)
 		toast({
@@ -172,9 +175,41 @@ const ChatItem = ({ chatName, chatAvatarURL, chatId }) => {
 			isClosable: true,
 		})
 	}
+	React.useEffect(() => {
+		const getUnReadMessages = async () => {
+			let userLastSeen = usersLastSeen[user.id]
+			let q = query(
+				collection(db, 'chats', chatId, 'messages'),
+				where('createdAt', '>', userLastSeen),
+				limit(10)
+			)
+			const querySnap = await getDocs(q)
+			if (querySnap.size > 0) setUnreadMessage(querySnap.size)
+		}
+		getUnReadMessages()
+	}, [user, chatId, usersLastSeen])
 	return (
 		<Box display='flex' p={4} cursor='pointer' _hover={{ bg: 'slate.200' }}>
-			<Avatar name={chatName} src={chatAvatarURL} mr={4} />
+			<Box position='relative' mr='4'>
+				<Avatar borderRadius='4' name={chatName} src={chatAvatarURL} />
+				{unreadMessage && (
+					<Flex
+						alignItems='center'
+						justifyContent='center'
+						position='absolute'
+						right='-2'
+						top='-2'
+						borderRadius='50%'
+						bg='red.400'
+						w='4'
+						h='4'
+					>
+						<Text fontSize='10px' lineHeight='var(--chakra-fontSizes-xs)'>
+							{unreadMessage > 9 ? '9+' : unreadMessage}
+						</Text>
+					</Flex>
+				)}
+			</Box>
 			<Box>
 				<Text fontSize='xl' fontWeight='bold'>
 					{chatName}
