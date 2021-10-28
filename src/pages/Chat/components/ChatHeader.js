@@ -210,7 +210,6 @@ const DeleteRoomBtn = () => {
 	const { deleteChat } = useChat()
 	const onDelete = async () => {
 		await deleteChat()
-		onClose()
 	}
 	const cancelRef = React.useRef()
 	return (
