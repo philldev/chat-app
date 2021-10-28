@@ -1,5 +1,11 @@
 import { Flex } from '@chakra-ui/layout'
-import { arrayUnion, doc, getDoc, updateDoc } from '@firebase/firestore'
+import {
+	arrayUnion,
+	deleteDoc,
+	doc,
+	getDoc,
+	updateDoc,
+} from '@firebase/firestore'
 import * as React from 'react'
 import { useParams } from 'react-router-dom'
 import { db } from '../../firebase'
@@ -7,6 +13,7 @@ import { useAuth } from '../../firebase/AuthContext'
 import { ChatHeader } from './components/ChatHeader'
 import { ChatList } from './components/ChatList'
 import { MessageInput } from './components/MessageInput'
+import { useHistory } from 'react-router-dom'
 
 const ChatContext = React.createContext(null)
 
@@ -21,6 +28,29 @@ const ChatProvider = ({ children }) => {
 	const { chatId } = useParams()
 	const { user } = useAuth()
 	const isMember = chat?.usersId?.some((ids) => ids === user?.id)
+	const history = useHistory()
+	const deleteChat = async () => {
+		if (user?.id === chat?.ownerId) {
+			try {
+				let chatRef = doc(db, 'chats', chatId)
+				await deleteDoc(chatRef)
+				history.push('/')
+			} catch (error) {
+				console.log(error.code)
+			}
+		}
+	}
+	const changeChatName = async (name) => {
+		if (user?.id === chat?.ownerId) {
+			try {
+				let chatRef = doc(db, 'chats', chatId)
+				await updateDoc(chatRef, { name })
+				setChat((p) => ({ ...p, name }))
+			} catch (error) {
+				console.log(error.code)
+			}
+		}
+	}
 	const joinChat = async () => {
 		const docRef = doc(db, 'chats', chatId)
 		let prevData = [...chat?.usersId]
@@ -47,17 +77,17 @@ const ChatProvider = ({ children }) => {
 					let ownerSnap = await getDoc(ownerRef)
 					if (ownerSnap.exists() && mounted)
 						setChat((p) => ({ ...p, admin: ownerSnap.data() }))
-					
-					let usersId = docSnap.data().usersId 
-					let roomUsers = [];
-					usersId.forEach( async (userId) => {
+
+					let usersId = docSnap.data().usersId
+					let roomUsers = []
+					usersId.forEach(async (userId) => {
 						let userRef = doc(db, 'users', userId)
 						let userSnap = await getDoc(userRef)
-						if(userSnap.exists()) {
+						if (userSnap.exists()) {
 							roomUsers.push(userSnap.data())
 						}
 					})
-					setChat( p => ({...p, roomUsers : roomUsers}))
+					setChat((p) => ({ ...p, roomUsers: roomUsers }))
 				}
 				if (!docSnap.exists() && mounted) setError(ChatErrorType.notExist)
 			} catch (error) {
@@ -73,7 +103,15 @@ const ChatProvider = ({ children }) => {
 	}, [chatId])
 	return (
 		<ChatContext.Provider
-			value={{ chat, isLoading, isMember, joinChat, error }}
+			value={{
+				chat,
+				isLoading,
+				isMember,
+				joinChat,
+				error,
+				deleteChat,
+				changeChatName,
+			}}
 		>
 			{children}
 		</ChatContext.Provider>
