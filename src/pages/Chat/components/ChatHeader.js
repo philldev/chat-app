@@ -1,13 +1,13 @@
-import { Avatar } from "@chakra-ui/avatar"
-import { Button } from "@chakra-ui/button"
-import { CopyIcon } from "@chakra-ui/icons"
-import { Box, Flex, Text } from "@chakra-ui/layout"
-import { useToast } from "@chakra-ui/toast"
-import { Link } from "react-router-dom"
-import { ChatErrorType, useChat } from "../Chat"
+import { Avatar } from '@chakra-ui/avatar'
+import { Button } from '@chakra-ui/button'
+import { CopyIcon } from '@chakra-ui/icons'
+import { Box, Flex, Text } from '@chakra-ui/layout'
+import { useToast } from '@chakra-ui/toast'
+import { Link } from 'react-router-dom'
+import { ChatErrorType, useChat } from '../Chat'
 
 export const ChatHeader = () => {
-	const { chat, error } = useChat()
+	const { chat, error, isLoading } = useChat()
 	const toast = useToast()
 	const copyRoomIdToClipboard = () => {
 		navigator.clipboard.writeText(chat?.id)
@@ -25,6 +25,7 @@ export const ChatHeader = () => {
 			borderColor='slate.500'
 			justifyContent='space-between'
 			alignItems='center'
+			h='20'
 		>
 			{chat && (
 				<Flex alignItems='center'>
@@ -52,9 +53,11 @@ export const ChatHeader = () => {
 				</Flex>
 			)}
 			{error === ChatErrorType.notExist && <Text>Chat Room not found!</Text>}
-			<Button as={Link} to='/' colorScheme='slate'>
-				Back
-			</Button>
+			{!isLoading && (
+				<Button as={Link} to='/' colorScheme='slate'>
+					Back
+				</Button>
+			)}
 		</Flex>
 	)
 }
