@@ -1,8 +1,5 @@
 import { Flex } from '@chakra-ui/layout'
-import {
-	arrayUnion, doc,
-	getDoc, updateDoc
-} from '@firebase/firestore'
+import { arrayUnion, doc, getDoc, updateDoc } from '@firebase/firestore'
 import * as React from 'react'
 import { useParams } from 'react-router-dom'
 import { db } from '../../firebase'
@@ -43,7 +40,25 @@ const ChatProvider = ({ children }) => {
 			try {
 				const docRef = doc(db, 'chats', chatId)
 				const docSnap = await getDoc(docRef)
-				if (docSnap.exists() && mounted) setChat({ ...docSnap.data() })
+				if (docSnap.exists() && mounted) {
+					setChat({ ...docSnap.data() })
+					let ownerId = docSnap.data().ownerId
+					let ownerRef = doc(db, 'users', ownerId)
+					let ownerSnap = await getDoc(ownerRef)
+					if (ownerSnap.exists() && mounted)
+						setChat((p) => ({ ...p, admin: ownerSnap.data() }))
+					
+					let usersId = docSnap.data().usersId 
+					let roomUsers = [];
+					usersId.forEach( async (userId) => {
+						let userRef = doc(db, 'users', userId)
+						let userSnap = await getDoc(userRef)
+						if(userSnap.exists()) {
+							roomUsers.push(userSnap.data())
+						}
+					})
+					setChat( p => ({...p, roomUsers : roomUsers}))
+				}
 				if (!docSnap.exists() && mounted) setError(ChatErrorType.notExist)
 			} catch (error) {
 				console.log(error)
