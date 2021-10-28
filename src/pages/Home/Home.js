@@ -146,6 +146,7 @@ const ChatList = () => {
 
 	return (
 		<Box>
+			<Text p='4'>Welcome to Chat Rooms!</Text>
 			{chats.map((chat, index) => (
 				<Link key={index} to={`/chat/${chat.id}`}>
 					<ChatItem
@@ -155,6 +156,7 @@ const ChatList = () => {
 					/>
 				</Link>
 			))}
+			
 		</Box>
 	)
 }
