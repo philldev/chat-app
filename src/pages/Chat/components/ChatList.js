@@ -35,7 +35,7 @@ export const ChatList = () => {
 	}, [messages])
 
 	return (
-		<VStack flexGrow='1' spacing='4' py='2' overflowY='auto'>
+		<VStack flexGrow='1' spacing='4' py='4' overflowY='auto'>
 			{messages?.map((m, index) => (
 				<MessageItem
 					key={index}
