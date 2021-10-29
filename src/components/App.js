@@ -2,8 +2,8 @@ import * as React from 'react'
 import { Box } from '@chakra-ui/layout'
 import { Spinner } from '@chakra-ui/spinner'
 import { BrowserRouter, Switch } from 'react-router-dom'
-import { Routes } from './routes'
-import { useAuth } from './context/AuthContext'
+import { Routes } from '../routes'
+import { useAuth } from '../context/AuthContext'
 
 export const App = () => {
 	const { isLoading: isFetchingUser, user } = useAuth()

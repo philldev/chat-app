@@ -12,6 +12,11 @@ dayjs.extend(calendar)
 export const ChatList = () => {
 	const [messages, setMessages] = React.useState([])
 	const { chatId } = useParams()
+	const ref = React.useRef(null)
+	const gotoBottom = () => {
+		const element = ref.current
+		element.scrollIntoView()
+	}
 	React.useEffect(() => {
 		const q = query(
 			collection(db, 'chats', chatId, 'messages'),
@@ -28,16 +33,9 @@ export const ChatList = () => {
 			unsubscribe()
 		}
 	}, [chatId])
-	const ref = React.useRef(null)
-	const gotoBottom = () => {
-		const element = ref.current
-		element.scrollIntoView()
-	}
-
 	React.useEffect(() => {
 		if (messages.length > 0) gotoBottom()
 	}, [messages])
-
 	return (
 		<VStack flexGrow='1' spacing='4' py='4' overflowY='auto'>
 			{messages?.map((m, index) => (

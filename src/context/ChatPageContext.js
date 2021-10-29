@@ -54,7 +54,7 @@ export const ChatPageProvider = ({ children }) => {
 			console.log(error.code)
 		}
 	}
-
+	const isAdmin = user?.id === chat.ownerId
 	React.useEffect(() => {
 		let mounted = true
 		const getChat = async () => {
@@ -113,6 +113,7 @@ export const ChatPageProvider = ({ children }) => {
 				error,
 				deleteChat,
 				changeChatName,
+				isAdmin
 			}}
 		>
 			{children}
