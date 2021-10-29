@@ -20,33 +20,9 @@ import { Button } from '@chakra-ui/button'
 import { SearchIcon } from '@chakra-ui/icons'
 import { useHistory } from 'react-router'
 
-const schema = yup.object({
-	email: yup.string().required('Email is required').email('Email is invalid'),
-	username: yup
-		.string()
-		.required('Username is required')
-		.min(1, 'Username must be longer than 1 character')
-		.max(25, 'Username cannot be longer than 25 characters'),
-})
-
 export const Header = () => {
 	const { signout, user } = useAuth()
 	const { isOpen, onOpen, onClose } = useDisclosure()
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-	} = useForm({
-		resolver: yupResolver(schema),
-		defaultValues: {
-			username: user.username,
-			email: user.email,
-		},
-	})
-	const [usernameDisabled, setUsernameDisabled] = React.useState(true)
-	const toggleUsernameDisabled = () => setUsernameDisabled((p) => !p)
-	const [isLoading, setIsLoading] = React.useState(false)
-	const onSubmit = (data) => {}
 	return (
 		<>
 			<Flex
@@ -73,51 +49,34 @@ export const Header = () => {
 			</Flex>
 			<Modal isOpen={isOpen} onClose={onClose} isCentered>
 				<ModalOverlay />
-				<ModalContent
-					as='form'
-					mx='2'
-					bg='slate.100'
-					color='slate.900'
-					onSubmit={handleSubmit(onSubmit)}
-				>
+				<ModalContent as='form' mx='2' bg='slate.100' color='slate.900'>
 					<ModalHeader>Profile</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
-						<VStack spacing='2' mb='4'>
+						<VStack spacing='3' mb='4'>
 							<VStack spacing='1' alignItems='flex-start' w='full'>
 								<Flex justifyContent='center' w='full' mb='4'>
 									<Avatar
 										size='lg'
+										borderColor='slate.500'
+										borderWidth='2px'
+										borderStyle='solid'
+										boxShadow='xl'
 										borderRadius='4'
 										name={user.username}
 										src={`https://avatars.dicebear.com/api/identicon/${user.username}.svg`}
 									/>
 								</Flex>
-								<Text fontSize='sm'>Username</Text>
-								<Input
-									bg='slate.200'
-									border='none'
-									placeholder='Username'
-									disabled={usernameDisabled}
-									{...register('username', { required: true })}
-								/>
-								<Text color='red.300' fontSize='xs' mt='1' textAlign='right'>
-									{errors.username?.message}
+								<Text color='slate.800' fontSize='sm'>
+									Username
 								</Text>
-								{/* <Button variant='link' fontSize='xs' mt='1' color='slate.900' alignSelf='flex-end' onClick={toggleUsernameDisabled} >{ usernameDisabled ? "Change username" : "Cancel"}</Button> */}
+								<Text>{user.username}</Text>
 							</VStack>
 							<VStack spacing='1' alignItems='flex-start' w='full'>
-								<Text fontSize='sm'>Email</Text>
-								<Input
-									bg='slate.200'
-									border='none'
-									placeholder='Email'
-									disabled
-									{...register('email', { required: true })}
-								/>
-								<Text color='red.300' fontSize='xs' mt='1' textAlign='right'>
-									{errors.email?.message}
+								<Text color='slate.800' fontSize='sm'>
+									Email
 								</Text>
+								<Text>{user.email}</Text>
 							</VStack>
 						</VStack>
 						<Button colorScheme='red' variant='link' onClick={signout}>
@@ -125,9 +84,6 @@ export const Header = () => {
 						</Button>
 					</ModalBody>
 					<ModalFooter justifyContent='center'>
-						{/* <Button colorScheme='slate' type='submit' {...{ isLoading }}>
-							Update Profile
-						</Button> */}
 						<Button colorScheme='slate' onClick={onClose}>
 							Back
 						</Button>

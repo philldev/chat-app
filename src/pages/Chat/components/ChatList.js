@@ -1,13 +1,13 @@
 import { Avatar } from '@chakra-ui/avatar'
 import { Flex, Text, VStack } from '@chakra-ui/layout'
-import {
-	collection, onSnapshot,
-	orderBy,
-	query
-} from '@firebase/firestore'
+import { collection, onSnapshot, orderBy, query } from '@firebase/firestore'
 import * as React from 'react'
 import { useParams } from 'react-router'
 import { db } from '../../../firebase'
+import dayjs from 'dayjs'
+import calendar from 'dayjs/plugin/calendar'
+
+dayjs.extend(calendar)
 
 export const ChatList = () => {
 	const [messages, setMessages] = React.useState([])
@@ -46,6 +46,7 @@ export const ChatList = () => {
 					username={m?.from}
 					avatarURL={`https://avatars.dicebear.com/api/identicon/${m?.from}.svg`}
 					message={m?.content}
+					createdAt={m?.createdAt}
 				/>
 			))}
 			<div ref={ref} />
@@ -53,13 +54,18 @@ export const ChatList = () => {
 	)
 }
 
-const MessageItem = ({ username, avatarURL, message }) => {
+const MessageItem = ({ username, avatarURL, message, createdAt }) => {
 	return (
 		<Flex w='full' px='4'>
 			<Avatar borderRadius='4' name='Dan Abrahmov' src={avatarURL} mr='4' />
-			<VStack spacing='2' alignItems='start'>
-				<Text fontWeight='bold'>{username}</Text>
-				<Text p='2' bg='slate.200' borderRadius='lg'>
+			<VStack spacing='1' alignItems='start'>
+				<Flex alignItems='center'>
+					<Text fontWeight='bold' mr='2'>
+						{username}
+					</Text>
+					<Text fontSize='10px' color='slate.800'>{dayjs().calendar(dayjs(createdAt))}</Text>
+				</Flex>
+				<Text>
 					{message}
 				</Text>
 			</VStack>
