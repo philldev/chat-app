@@ -1,7 +1,6 @@
 import { Avatar } from '@chakra-ui/avatar'
 import { Button } from '@chakra-ui/button'
 import { useDisclosure } from '@chakra-ui/hooks'
-import { CopyIcon } from '@chakra-ui/icons'
 import { Input } from '@chakra-ui/input'
 import { Box, Flex, Text } from '@chakra-ui/layout'
 import {
@@ -11,9 +10,9 @@ import {
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-	ModalOverlay,
+	ModalOverlay
 } from '@chakra-ui/modal'
-import { useToast } from '@chakra-ui/toast'
+import { chakra } from '@chakra-ui/system'
 import {
 	collection,
 	doc,
@@ -21,17 +20,16 @@ import {
 	limit,
 	query,
 	setDoc,
-	where,
+	where
 } from '@firebase/firestore'
 import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useHistory } from 'react-router-dom'
+import { UsersIcon } from '../../common/icons-jsx/users'
 import { useAuth } from '../../context/AuthContext'
 import { db } from '../../firebase'
 import { createId } from '../../utils/createId'
 import { Header } from './components/Header'
-import { UsersIcon } from '../../common/icons-jsx/users'
-import { chakra } from '@chakra-ui/system'
 
 export const HomePage = () => {
 	return (
