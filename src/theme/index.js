@@ -3,7 +3,12 @@ import { slateDark } from '@radix-ui/colors'
 
 export const appTheme = extendTheme({
 	components: {
-		Button: { baseStyle: { _focus: { boxShadow: 'none' } } },
+		Button: {
+			baseStyle: { _focus: { boxShadow: 'none' } },
+			defaultProps: {
+				colorScheme: 'slate',
+			},
+		},
 		Input: {
 			baseStyle: {
 				_focus: {
@@ -14,10 +19,10 @@ export const appTheme = extendTheme({
 			},
 		},
 	},
-	 fonts: {
-    heading: "Poppins",
-    body: "Poppins",
-  },
+	fonts: {
+		heading: 'Poppins',
+		body: 'Poppins',
+	},
 	colors: {
 		slate: {
 			50: slateDark.slate1,

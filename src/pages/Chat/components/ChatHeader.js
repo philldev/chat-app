@@ -22,8 +22,8 @@ import {
 } from '@chakra-ui/modal'
 import { useToast } from '@chakra-ui/toast'
 import { Link } from 'react-router-dom'
-import { useAuth } from '../../../firebase/AuthContext'
-import { ChatErrorType, useChat } from '../Chat'
+import { useAuth } from '../../../context/AuthContext'
+import { ChatErrorType, useChat } from '../../../context/ChatPageContext'
 
 export const ChatHeader = () => {
 	const { chat, error, isLoading } = useChat()
@@ -67,7 +67,7 @@ export const ChatHeader = () => {
 			)}
 			{error === ChatErrorType.notExist && <Text>Chat Room not found!</Text>}
 			{!isLoading && (
-				<Button as={Link} to='/' colorScheme='slate'>
+				<Button as={Link} to='/'>
 					Back
 				</Button>
 			)}
@@ -145,11 +145,9 @@ const ChatSettings = ({ isOpen, onClose }) => {
 								</Box>
 							)}
 							{isAdmin && !isChangingName && (
-								<Button colorScheme='slate' onClick={toggleIsChangingName}>
-									Change Room Name
-								</Button>
+								<Button onClick={toggleIsChangingName}>Change Room Name</Button>
 							)}
-							<Button colorScheme='slate'>Leave Room</Button>
+							<Button>Leave Room</Button>
 							{isAdmin && <DeleteRoomBtn />}
 						</VStack>
 					</Flex>
@@ -236,7 +234,7 @@ const DeleteRoomBtn = () => {
 						</AlertDialogBody>
 
 						<AlertDialogFooter>
-							<Button colorScheme='slate' ref={cancelRef} onClick={onClose}>
+							<Button ref={cancelRef} onClick={onClose}>
 								Cancel
 							</Button>
 							<Button colorScheme='red' onClick={onDelete} ml={3}>

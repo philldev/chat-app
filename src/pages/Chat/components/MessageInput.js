@@ -3,10 +3,10 @@ import { Input } from '@chakra-ui/input'
 import { Box } from '@chakra-ui/layout'
 import { doc, setDoc, Timestamp } from '@firebase/firestore'
 import { useForm } from 'react-hook-form'
+import { useAuth } from '../../../context/AuthContext'
+import { ChatErrorType, useChat } from '../../../context/ChatPageContext'
 import { db } from '../../../firebase'
-import { useAuth } from '../../../firebase/AuthContext'
 import { createId } from '../../../utils/createId'
-import { ChatErrorType, useChat } from '../Chat'
 
 export const MessageInput = () => {
 	const { user } = useAuth()
@@ -57,7 +57,6 @@ export const MessageInput = () => {
 				{...register('content')}
 			/>
 			<Button
-				colorScheme='slate'
 				py='8'
 				px='8'
 				borderRadius='0'

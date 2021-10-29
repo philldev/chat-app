@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/modal'
 import * as React from 'react'
 import { useHistory } from 'react-router'
-import { useAuth } from '../../../firebase/AuthContext'
+import { useAuth } from '../../../context/AuthContext'
 
 export const Header = () => {
 	const { signout, user } = useAuth()
@@ -81,7 +81,7 @@ export const Header = () => {
 						</Button>
 					</ModalBody>
 					<ModalFooter justifyContent='center'>
-						<Button colorScheme='slate' onClick={onClose}>
+						<Button onClick={onClose}>
 							Back
 						</Button>
 					</ModalFooter>

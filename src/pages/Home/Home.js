@@ -25,8 +25,8 @@ import {
 import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useHistory } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
 import { db } from '../../firebase'
-import { useAuth } from '../../firebase/AuthContext'
 import { createId } from '../../utils/createId'
 import { Header } from './components/Header'
 
@@ -71,7 +71,6 @@ const NewChatBtn = () => {
 		<>
 			<Box position='fixed' bottom='0' left='0' w='100%'>
 				<Button
-					colorScheme='slate'
 					w='full'
 					py='8'
 					borderRadius='0'
@@ -108,7 +107,7 @@ const NewChatBtn = () => {
 						</Box>
 					</ModalBody>
 					<ModalFooter justifyContent='center'>
-						<Button colorScheme='slate' mr={3} type='submit' {...{ isLoading }}>
+						<Button mr={3} type='submit' {...{ isLoading }}>
 							Create Room
 						</Button>
 					</ModalFooter>

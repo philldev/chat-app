@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
-import { useAuth } from '../firebase/AuthContext'
 import { useState } from 'react'
+import { useAuth } from '../context/AuthContext'
 
 const schema = yup
 	.object({
@@ -77,7 +77,7 @@ export const LoginPage = () => {
 						</Text>
 					</Box>
 				</VStack>
-				<Button type='submit' colorScheme='slate' w='full' mb='2'>
+				<Button type='submit' w='full' mb='2'>
 					Login
 				</Button>
 				<Text color='red.300' fontSize='xs' mt='1' textAlign='right'>

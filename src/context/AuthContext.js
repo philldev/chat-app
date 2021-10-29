@@ -1,3 +1,4 @@
+import * as React from 'react'
 import {
 	createUserWithEmailAndPassword,
 	onAuthStateChanged,
@@ -5,8 +6,7 @@ import {
 	signOut,
 } from '@firebase/auth'
 import { doc, getDoc, setDoc } from '@firebase/firestore'
-import * as React from 'react'
-import { auth, db } from '.'
+import { auth, db } from '../firebase'
 
 const AuthContext = React.createContext()
 

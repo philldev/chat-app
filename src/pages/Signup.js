@@ -2,12 +2,12 @@ import { Button } from '@chakra-ui/button'
 import { Input } from '@chakra-ui/input'
 import { Box, Text, VStack } from '@chakra-ui/layout'
 import { Link } from 'react-router-dom'
-import { useAuth } from '../firebase/AuthContext'
 import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useHistory } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 const schema = yup
 	.object({
@@ -93,7 +93,7 @@ export const SignupPage = () => {
 						</Text>
 					</Box>
 				</VStack>
-				<Button type='submit' colorScheme='slate' w='full' mb='2'>
+				<Button type='submit' w='full' mb='2'>
 					Create Account
 				</Button>
 				<Text color='slate.800'>
