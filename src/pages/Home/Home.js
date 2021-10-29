@@ -1,8 +1,8 @@
-import * as React from 'react'
 import { Box } from '@chakra-ui/layout'
-import { ChatList } from './components/ChatList'
-import { HomeHeader } from './components/HomeHeader'
-import { NewChatButton } from './components/NewChatButton'
+import * as React from 'react'
+import { ChatList } from '../../components/HomePage/ChatList'
+import { HomeHeader } from '../../components/HomePage/HomeHeader'
+import { NewChatButton } from '../../components/HomePage/NewChatButton'
 
 export const HomePage = () => {
 	return (
@@ -13,5 +13,3 @@ export const HomePage = () => {
 		</Box>
 	)
 }
-
-

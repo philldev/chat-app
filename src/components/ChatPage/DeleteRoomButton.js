@@ -8,7 +8,7 @@ import {
 	AlertDialogHeader,
 	AlertDialogOverlay,
 } from '@chakra-ui/modal'
-import { useChat } from '../../../context/ChatPageContext'
+import { useChat } from '../../context/ChatPageContext'
 
 export const DeleteRoomButton = () => {
 	const { deleteChat, isAdmin } = useChat()

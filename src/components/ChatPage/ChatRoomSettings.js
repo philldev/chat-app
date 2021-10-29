@@ -11,8 +11,8 @@ import {
 	ModalOverlay,
 } from '@chakra-ui/modal'
 import * as React from 'react'
-import { useAuth } from '../../../context/AuthContext'
-import { useChat } from '../../../context/ChatPageContext'
+import { useAuth } from '../../context/AuthContext'
+import { useChat } from '../../context/ChatPageContext'
 import { ChangeChatRoomName } from './ChangeChatRoomName'
 import { DeleteRoomButton } from './DeleteRoomButton'
 import { RoomChatId } from './RoomChatId'

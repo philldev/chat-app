@@ -1,6 +1,6 @@
 import { Avatar } from '@chakra-ui/avatar'
 import { Box, Flex, Text } from '@chakra-ui/layout'
-import { useAuth } from '../../../context/AuthContext'
+import { useAuth } from '../../context/AuthContext'
 
 export const UserInfo = (props) => {
 	const { user } = useAuth()

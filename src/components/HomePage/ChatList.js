@@ -2,8 +2,8 @@ import { Box, Text } from '@chakra-ui/layout'
 import { collection, getDocs, query, where } from '@firebase/firestore'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
-import { useAuth } from '../../../context/AuthContext'
-import { db } from '../../../firebase'
+import { useAuth } from '../../context/AuthContext'
+import { db } from '../../firebase'
 import { ChatItem } from './ChatItem'
 
 export const ChatList = () => {

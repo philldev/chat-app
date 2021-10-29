@@ -3,7 +3,7 @@ import { useDisclosure } from '@chakra-ui/hooks'
 import { Flex, Text } from '@chakra-ui/layout'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
-import { ChatErrorType, useChat } from '../../../context/ChatPageContext'
+import { ChatErrorType, useChat } from '../../context/ChatPageContext'
 import { ChatRoomInfo } from './ChatRoomInfo'
 import { ChatRoomSettings } from './ChatRoomSettings'
 

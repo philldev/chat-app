@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { chakra } from "@chakra-ui/system"
-import { UsersIcon } from "../../../components/icons/users"
-import { useAuth } from "../../../context/AuthContext"
 import { collection, getDocs, limit, query, where } from '@firebase/firestore'
-import { db } from '../../../firebase'
 import { Box, Flex, Text } from '@chakra-ui/layout'
 import { Avatar } from '@chakra-ui/avatar'
+import { UsersIcon } from '../icons/users'
+import { useAuth } from '../../context/AuthContext'
+import { db } from '../../firebase'
 
 const UsersIconChakra = chakra(UsersIcon)
 

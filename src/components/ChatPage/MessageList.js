@@ -3,13 +3,13 @@ import { Flex, Text, VStack } from '@chakra-ui/layout'
 import { collection, onSnapshot, orderBy, query } from '@firebase/firestore'
 import * as React from 'react'
 import { useParams } from 'react-router'
-import { db } from '../../../firebase'
 import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar'
+import { db } from '../../firebase'
 
 dayjs.extend(calendar)
 
-export const ChatList = () => {
+export const MessageList = () => {
 	const [messages, setMessages] = React.useState([])
 	const { chatId } = useParams()
 	const ref = React.useRef(null)

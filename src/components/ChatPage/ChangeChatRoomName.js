@@ -2,8 +2,8 @@ import { Button } from '@chakra-ui/button'
 import { Input } from '@chakra-ui/input'
 import * as React from 'react'
 import { Box } from '@chakra-ui/layout'
-import { useChat } from '../../../context/ChatPageContext'
 import { useDisclosure } from '@chakra-ui/hooks'
+import { useChat } from '../../context/ChatPageContext'
 
 export const ChangeChatRoomName = () => {
 	const { changeChatName, isAdmin } = useChat()

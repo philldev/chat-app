@@ -6,9 +6,9 @@ import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHea
 import { doc, setDoc } from "@firebase/firestore"
 import { useForm } from "react-hook-form"
 import { useHistory } from "react-router"
-import { useAuth } from "../../../context/AuthContext"
-import { db } from "../../../firebase"
-import { createId } from "../../../utils/createId"
+import { useAuth } from '../../context/AuthContext'
+import { db } from '../../firebase'
+import { createId } from '../../utils/createId'
 
 export const NewChatDialog = ({isOpen, onClose}) => {
 	const { user } = useAuth()
