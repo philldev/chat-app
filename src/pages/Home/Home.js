@@ -11,7 +11,7 @@ import {
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-	ModalOverlay,
+	ModalOverlay
 } from '@chakra-ui/modal'
 import { useToast } from '@chakra-ui/toast'
 import {
@@ -20,9 +20,7 @@ import {
 	getDocs,
 	limit,
 	query,
-	setDoc,
-	Timestamp,
-	where,
+	setDoc, where
 } from '@firebase/firestore'
 import * as React from 'react'
 import { useForm } from 'react-hook-form'

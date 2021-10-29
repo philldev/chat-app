@@ -1,11 +1,9 @@
-import * as React from 'react'
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useAuth } from '../../../firebase/AuthContext'
-import { useDisclosure } from '@chakra-ui/hooks'
-import { useForm } from 'react-hook-form'
-import { Box, Flex, Text, VStack } from '@chakra-ui/layout'
 import { Avatar } from '@chakra-ui/avatar'
+import { Button } from '@chakra-ui/button'
+import { useDisclosure } from '@chakra-ui/hooks'
+import { SearchIcon } from '@chakra-ui/icons'
+import { Input } from '@chakra-ui/input'
+import { Box, Flex, Text, VStack } from '@chakra-ui/layout'
 import {
 	Modal,
 	ModalBody,
@@ -13,12 +11,11 @@ import {
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-	ModalOverlay,
+	ModalOverlay
 } from '@chakra-ui/modal'
-import { Input } from '@chakra-ui/input'
-import { Button } from '@chakra-ui/button'
-import { SearchIcon } from '@chakra-ui/icons'
+import * as React from 'react'
 import { useHistory } from 'react-router'
+import { useAuth } from '../../../firebase/AuthContext'
 
 export const Header = () => {
 	const { signout, user } = useAuth()
