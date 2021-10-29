@@ -11,7 +11,7 @@ import {
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-	ModalOverlay
+	ModalOverlay,
 } from '@chakra-ui/modal'
 import { useToast } from '@chakra-ui/toast'
 import {
@@ -20,7 +20,8 @@ import {
 	getDocs,
 	limit,
 	query,
-	setDoc, where
+	setDoc,
+	where,
 } from '@firebase/firestore'
 import * as React from 'react'
 import { useForm } from 'react-hook-form'
@@ -29,6 +30,8 @@ import { useAuth } from '../../context/AuthContext'
 import { db } from '../../firebase'
 import { createId } from '../../utils/createId'
 import { Header } from './components/Header'
+import { UsersIcon } from '../../common/icons-jsx/users'
+import { chakra } from '@chakra-ui/system'
 
 export const HomePage = () => {
 	return (
@@ -152,6 +155,7 @@ const ChatList = () => {
 						chatName={chat.name.toUpperCase()}
 						chatAvatarURL={`https://avatars.dicebear.com/api/identicon/${chat.name}.svg`}
 						usersLastSeen={chat.usersLastSeen}
+						usersLength={chat.usersId.length}
 					/>
 				</Link>
 			))}
@@ -159,19 +163,11 @@ const ChatList = () => {
 	)
 }
 
-const ChatItem = ({ chatName, chatAvatarURL, chatId, usersLastSeen }) => {
-	const toast = useToast()
+const UsersIconChakra = chakra(UsersIcon)
+
+const ChatItem = ({ chatName, chatAvatarURL, chatId, usersLastSeen, usersLength }) => {
 	const { user } = useAuth()
 	const [unreadMessage, setUnreadMessage] = React.useState(null)
-	const copyRoomIdToClipboard = () => {
-		navigator.clipboard.writeText(chatId)
-		toast({
-			title: 'Room id copied',
-			status: 'success',
-			duration: 2000,
-			isClosable: true,
-		})
-	}
 	React.useEffect(() => {
 		const getUnReadMessages = async () => {
 			let userLastSeen = usersLastSeen[user.id]
@@ -211,15 +207,10 @@ const ChatItem = ({ chatName, chatAvatarURL, chatId, usersLastSeen }) => {
 				<Text fontSize='xl' fontWeight='bold'>
 					{chatName}
 				</Text>
-				<Text
-					cursor='pointer'
-					onClick={copyRoomIdToClipboard}
-					title='Copy room id'
-					color='slate.900'
-					fontSize='sm'
-				>
-					Room ID : {chatId} <CopyIcon />
-				</Text>
+				<Flex alignItems='center'>
+					<UsersIconChakra w='16px' h='16px' mr='2' />
+					<Text fontSize='sm'>Users : {usersLength}</Text>
+				</Flex>
 			</Box>
 		</Box>
 	)
