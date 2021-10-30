@@ -2,9 +2,9 @@ import { Flex } from '@chakra-ui/layout'
 import { useWindowWidth } from '@react-hook/window-size'
 import * as React from 'react'
 import { useHistory, useParams } from 'react-router'
-import { ChatHeader } from '../../components/ChatPage/ChatHeader'
-import { MessageInput } from '../../components/ChatPage/MessageInput'
-import { MessageList } from '../../components/ChatPage/MessageList'
+import { ChatHeader } from '../../components/ChatHeader'
+import { MessageInput } from '../../components/MessageInput'
+import { MessageList } from '../../components/MessageList'
 import { ChatProvider } from '../../context/ChatContext'
 
 export const Chat = () => {

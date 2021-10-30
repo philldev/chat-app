@@ -3,8 +3,8 @@ import { Flex, Text, VStack } from '@chakra-ui/layout'
 import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar'
 import * as React from 'react'
-import chatsCollection from '../../api/chat'
-import { useChat } from '../../context/ChatContext'
+import chatsCollection from '../api/chat'
+import { useChat } from '../context/ChatContext'
 
 dayjs.extend(calendar)
 

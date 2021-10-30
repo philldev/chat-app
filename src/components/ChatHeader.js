@@ -1,12 +1,12 @@
+import * as React from 'react'
 import { Button } from '@chakra-ui/button'
 import { useDisclosure } from '@chakra-ui/hooks'
 import { Flex, Text } from '@chakra-ui/layout'
 import { useWindowWidth } from '@react-hook/window-size'
-import * as React from 'react'
 import { Link } from 'react-router-dom'
-import { ChatErrorType, useChat } from '../../context/ChatContext'
 import { ChatRoomInfo } from './ChatRoomInfo'
 import { ChatRoomSettings } from './ChatRoomSettings'
+import { ChatErrorType, useChat } from '../context/ChatContext'
 
 export const ChatHeader = () => {
 	const { chat, error, isLoading } = useChat()

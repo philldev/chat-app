@@ -1,10 +1,10 @@
-import chatsCollection from '../../api/chat'
 import { Button } from '@chakra-ui/button'
 import { Input } from '@chakra-ui/input'
 import { Box } from '@chakra-ui/layout'
 import { useForm } from 'react-hook-form'
-import { useAuth } from '../../context/AuthContext'
-import { ChatErrorType, useChat } from '../../context/ChatContext'
+import chatsCollection from '../api/chat'
+import { useAuth } from '../context/AuthContext'
+import { ChatErrorType, useChat } from '../context/ChatContext'
 
 const Chats = chatsCollection()
 
