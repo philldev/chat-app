@@ -1,6 +1,6 @@
 import { LoginPage, SignupPage } from '../pages'
 
-export const auth = [
+export const authRoutes = [
 	{
 		component: SignupPage,
 		path: '/signup',
