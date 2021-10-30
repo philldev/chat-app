@@ -26,7 +26,9 @@ export const ChatList = () => {
 		}
 	}, [user])
 	return (
-		<Box>
+		<Box
+		flexGrow='1'
+		>
 			<Text p='4'>Welcome to Chat Rooms!</Text>
 			{chats.map((chat, index) => (
 				<Link key={index} to={`/chat/${chat.id}`}>

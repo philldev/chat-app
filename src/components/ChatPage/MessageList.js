@@ -1,10 +1,10 @@
-import * as React from 'react'
-import dayjs from 'dayjs'
-import calendar from 'dayjs/plugin/calendar'
-import chatsCollection from '../../api/chat'
 import { Avatar } from '@chakra-ui/avatar'
 import { Flex, Text, VStack } from '@chakra-ui/layout'
-import { useParams } from 'react-router'
+import dayjs from 'dayjs'
+import calendar from 'dayjs/plugin/calendar'
+import * as React from 'react'
+import chatsCollection from '../../api/chat'
+import { useChat } from '../../context/ChatContext'
 
 dayjs.extend(calendar)
 
@@ -12,7 +12,7 @@ const Chats = chatsCollection()
 
 export const MessageList = () => {
 	const [messages, setMessages] = React.useState([])
-	const { chatId } = useParams()
+	const {chatId} = useChat()
 	const ref = React.useRef(null)
 	const gotoBottom = () => {
 		const element = ref.current

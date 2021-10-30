@@ -1,6 +1,6 @@
 import { Avatar } from '@chakra-ui/avatar'
 import { Box, Flex, Text } from '@chakra-ui/layout'
-import { useChat } from '../../context/ChatPageContext'
+import { useChat } from '../../context/ChatContext'
 import { RoomChatId } from './RoomChatId'
 
 export const ChatRoomInfo = ({ onChatRoomInfoClick }) => {

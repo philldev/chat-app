@@ -8,7 +8,7 @@ export const NewChatButton = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	return (
 		<>
-			<Box position='fixed' bottom='0' left='0' w='100%'>
+			<Box w='100%'>
 				<Button
 					w='full'
 					py='8'

@@ -10,12 +10,14 @@ export const HomeHeader = () => {
 	return (
 		<>
 			<Flex
-				p='4'
+				h='20'
+				alignItems='center'
+				px='4'
 				borderBottom='1px solid'
 				borderColor='slate.500'
 				justifyContent='space-between'
 			>
-				<UserInfo onClick={onOpen} />
+				<UserInfo onClick={onOpen} mr='2' />
 				<SearchBox />
 			</Flex>
 			<ProfileDialog {...{ isOpen, onClose }} />
