@@ -1,12 +1,12 @@
+import chatsCollection from '../../api/chat'
 import { Button } from '@chakra-ui/button'
 import { Input } from '@chakra-ui/input'
 import { Box } from '@chakra-ui/layout'
-import { doc, setDoc, Timestamp } from '@firebase/firestore'
 import { useForm } from 'react-hook-form'
 import { useAuth } from '../../context/AuthContext'
 import { ChatErrorType, useChat } from '../../context/ChatPageContext'
-import { db } from '../../firebase'
-import { createId } from '../../utils/createId'
+
+const Chats = chatsCollection()
 
 export const MessageInput = () => {
 	const { user } = useAuth()
@@ -14,17 +14,15 @@ export const MessageInput = () => {
 	const { register, handleSubmit, reset } = useForm({})
 	const onSubmit = async (data) => {
 		if (data.content) {
-			const message = {
-				id: createId(),
-				from: user.username,
-				content: data.content,
-				createdAt: Timestamp.now().toMillis(),
-			}
-			await setDoc(doc(db, 'chats', chat.id, 'messages', message.id), message)
-			reset()
 			try {
+				await Chats.addMessage({
+					content: data.content,
+					user,
+					chatId: chat.id,
+				})
+				reset()
 			} catch (error) {
-				console.log(error.code)
+				console.log(error)
 			}
 		}
 	}

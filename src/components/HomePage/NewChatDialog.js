@@ -1,16 +1,24 @@
 import * as React from 'react'
-import { Button } from "@chakra-ui/button"
-import { Input } from "@chakra-ui/input"
-import { Box, Text } from "@chakra-ui/layout"
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from "@chakra-ui/modal"
-import { doc, setDoc } from "@firebase/firestore"
-import { useForm } from "react-hook-form"
-import { useHistory } from "react-router"
+import { Button } from '@chakra-ui/button'
+import { Input } from '@chakra-ui/input'
+import { Box, Text } from '@chakra-ui/layout'
+import {
+	Modal,
+	ModalBody,
+	ModalCloseButton,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	ModalOverlay
+} from '@chakra-ui/modal'
+import { useForm } from 'react-hook-form'
+import { useHistory } from 'react-router'
+import chatsCollection from '../../api/chat'
 import { useAuth } from '../../context/AuthContext'
-import { db } from '../../firebase'
-import { createId } from '../../utils/createId'
 
-export const NewChatDialog = ({isOpen, onClose}) => {
+const Chats = chatsCollection()
+
+export const NewChatDialog = ({ isOpen, onClose }) => {
 	const { user } = useAuth()
 	const {
 		register,
@@ -20,19 +28,15 @@ export const NewChatDialog = ({isOpen, onClose}) => {
 	const [isLoading, setIsLoading] = React.useState(false)
 	const history = useHistory()
 	const onSubmit = async (data) => {
-		const newChat = {
-			id: createId(),
-			ownerId: user.id,
-			name: data.chatName,
-			usersId: [user.id],
-			messages: [],
-		}
 		try {
 			setIsLoading(true)
-			await setDoc(doc(db, 'chats', newChat.id), newChat)
-			history.push('/chat/' + newChat.id)
+			const chat = await Chats.createChat({
+				ownerId: user.id,
+				name: data.chatName,
+			})
+			history.push('/chat/' + chat.id)
 		} catch (error) {
-			console.log(error.code)
+			console.log(error)
 			setIsLoading(false)
 		}
 	}

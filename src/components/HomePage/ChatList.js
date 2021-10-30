@@ -1,10 +1,11 @@
-import { Box, Text } from '@chakra-ui/layout'
-import { collection, getDocs, query, where } from '@firebase/firestore'
 import * as React from 'react'
+import chatsCollection from '../../api/chat'
+import { Box, Text } from '@chakra-ui/layout'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
-import { db } from '../../firebase'
 import { ChatItem } from './ChatItem'
+
+const Chats = chatsCollection()
 
 export const ChatList = () => {
 	const { user } = useAuth()
@@ -12,22 +13,18 @@ export const ChatList = () => {
 	React.useEffect(() => {
 		let mounted = true
 		const getChats = async () => {
-			const q = query(
-				collection(db, 'chats'),
-				where('usersId', 'array-contains', user.id)
-			)
-			const querySnap = await getDocs(q)
-			let chatsFromDoc = []
-			querySnap.forEach((d) => {
-				chatsFromDoc = [...chatsFromDoc, d.data()]
-			})
-			if (mounted) setChats(chatsFromDoc)
+			try {
+				const chatsFromDoc = await Chats.getUsersChats({ user })
+				if (mounted) setChats(chatsFromDoc)
+			} catch (error) {
+				console.log(error.code)
+			}
 		}
 		getChats()
 		return () => {
 			mounted = false
 		}
-	}, [user.id])
+	}, [user])
 	return (
 		<Box>
 			<Text p='4'>Welcome to Chat Rooms!</Text>

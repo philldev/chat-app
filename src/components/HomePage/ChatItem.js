@@ -1,35 +1,45 @@
 import * as React from 'react'
-import { chakra } from "@chakra-ui/system"
-import { collection, getDocs, limit, query, where } from '@firebase/firestore'
-import { Box, Flex, Text } from '@chakra-ui/layout'
+import chatsCollection from '../../api/chat'
 import { Avatar } from '@chakra-ui/avatar'
-import { UsersIcon } from '../icons/users'
+import { Box, Flex, Text } from '@chakra-ui/layout'
+import { chakra } from '@chakra-ui/system'
 import { useAuth } from '../../context/AuthContext'
-import { db } from '../../firebase'
+import { UsersIcon } from '../icons/users'
 
 const UsersIconChakra = chakra(UsersIcon)
+const Chats = chatsCollection()
 
-export const ChatItem = ({ chatName, chatAvatarURL, chatId, usersLastSeen, usersLength }) => {
+export const ChatItem = ({
+	chatName,
+	chatAvatarURL,
+	chatId,
+	usersLastSeen,
+	usersLength,
+}) => {
 	const { user } = useAuth()
-	const [unreadMessage, setUnreadMessage] = React.useState(null)
+	const [unreadMessageCount, setUnreadMessageCount] = React.useState(null)
 	React.useEffect(() => {
-		const getUnReadMessages = async () => {
-			let userLastSeen = usersLastSeen[user.id]
-			let q = query(
-				collection(db, 'chats', chatId, 'messages'),
-				where('createdAt', '>', userLastSeen),
-				limit(10)
-			)
-			const querySnap = await getDocs(q)
-			if (querySnap.size > 0) setUnreadMessage(querySnap.size)
+		const getUnReadMessagesCount = async () => {
+			try {
+				let count = await Chats.getUnReadMessagesCount({
+					chatId,
+					chatUsersLastSeen: usersLastSeen,
+					user,
+				})
+				if (count > 0) {
+					setUnreadMessageCount(count)
+				}
+			} catch (error) {
+				console.log(error)
+			}
 		}
-		getUnReadMessages()
+		getUnReadMessagesCount()
 	}, [user, chatId, usersLastSeen])
 	return (
 		<Box display='flex' p={4} cursor='pointer' _hover={{ bg: 'slate.200' }}>
 			<Box position='relative' mr='4'>
 				<Avatar borderRadius='4' name={chatName} src={chatAvatarURL} />
-				{unreadMessage && (
+				{unreadMessageCount && (
 					<Flex
 						alignItems='center'
 						justifyContent='center'
@@ -42,7 +52,7 @@ export const ChatItem = ({ chatName, chatAvatarURL, chatId, usersLastSeen, users
 						h='4'
 					>
 						<Text fontSize='10px' lineHeight='var(--chakra-fontSizes-xs)'>
-							{unreadMessage > 9 ? '9+' : unreadMessage}
+							{unreadMessageCount > 9 ? '9+' : unreadMessageCount}
 						</Text>
 					</Flex>
 				)}

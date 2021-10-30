@@ -1,13 +1,14 @@
-import { Avatar } from '@chakra-ui/avatar'
-import { Flex, Text, VStack } from '@chakra-ui/layout'
-import { collection, onSnapshot, orderBy, query } from '@firebase/firestore'
 import * as React from 'react'
-import { useParams } from 'react-router'
 import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar'
-import { db } from '../../firebase'
+import chatsCollection from '../../api/chat'
+import { Avatar } from '@chakra-ui/avatar'
+import { Flex, Text, VStack } from '@chakra-ui/layout'
+import { useParams } from 'react-router'
 
 dayjs.extend(calendar)
+
+const Chats = chatsCollection()
 
 export const MessageList = () => {
 	const [messages, setMessages] = React.useState([])
@@ -18,17 +19,12 @@ export const MessageList = () => {
 		element.scrollIntoView()
 	}
 	React.useEffect(() => {
-		const q = query(
-			collection(db, 'chats', chatId, 'messages'),
-			orderBy('createdAt', 'asc')
+		const unsubscribe = Chats.onMessagesSnapshot(
+			(messagesData) => {
+				setMessages(messagesData)
+			},
+			{ chatId }
 		)
-		const unsubscribe = onSnapshot(q, (querySnapshot) => {
-			const messagesDocs = []
-			querySnapshot.forEach((doc) => {
-				messagesDocs.push(doc.data())
-			})
-			setMessages(messagesDocs)
-		})
 		return () => {
 			unsubscribe()
 		}
@@ -61,11 +57,11 @@ const MessageItem = ({ username, avatarURL, message, createdAt }) => {
 					<Text fontWeight='bold' mr='2'>
 						{username}
 					</Text>
-					<Text fontSize='10px' color='slate.800'>{dayjs().calendar(dayjs(createdAt))}</Text>
+					<Text fontSize='10px' color='slate.800'>
+						{dayjs().calendar(dayjs(createdAt))}
+					</Text>
 				</Flex>
-				<Text>
-					{message}
-				</Text>
+				<Text>{message}</Text>
 			</VStack>
 		</Flex>
 	)

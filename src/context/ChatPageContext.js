@@ -1,7 +1,6 @@
-import { arrayUnion, deleteDoc, doc, getDoc, Timestamp, updateDoc } from '@firebase/firestore'
 import * as React from 'react'
 import { useHistory, useParams } from 'react-router'
-import { db } from '../firebase'
+import chatsCollection from '../api/chat'
 import { useAuth } from './AuthContext'
 
 const ChatPageContext = React.createContext(null)
@@ -10,20 +9,22 @@ export const ChatErrorType = {
 	notExist: 'not-exist',
 }
 
+const Chats = chatsCollection()
+
 export const ChatPageProvider = ({ children }) => {
 	const [chat, setChat] = React.useState(null)
 	const [error, setError] = React.useState(null)
 	const [isLoading, setIsLoading] = React.useState(true)
 	const { chatId } = useParams()
 	const { user } = useAuth()
-	const isMember = chat?.usersId?.some((ids) => ids === user?.id)
 	const history = useHistory()
+	const isMember = chat?.usersId?.some((ids) => ids === user?.id)
+	const isAdmin = user?.id === chat?.ownerId
 
 	const deleteChat = async () => {
-		if (user?.id === chat?.ownerId) {
+		if (isAdmin) {
 			try {
-				let chatRef = doc(db, 'chats', chatId)
-				await deleteDoc(chatRef)
+				await Chats.deleteChat({ chatId: chat.id })
 				history.push('/')
 			} catch (error) {
 				console.log(error.code)
@@ -31,10 +32,9 @@ export const ChatPageProvider = ({ children }) => {
 		}
 	}
 	const changeChatName = async (name) => {
-		if (user?.id === chat?.ownerId) {
+		if (isAdmin) {
 			try {
-				let chatRef = doc(db, 'chats', chatId)
-				await updateDoc(chatRef, { name })
+				await Chats.updateChatName({ name, userId: user.id })
 				setChat((p) => ({ ...p, name }))
 			} catch (error) {
 				console.log(error.code)
@@ -42,47 +42,28 @@ export const ChatPageProvider = ({ children }) => {
 		}
 	}
 	const joinChat = async () => {
-		const docRef = doc(db, 'chats', chatId)
-		let prevData = [...chat?.usersId]
-		try {
-			setChat((p) => ({ ...p, usersId: [...p.usersId, user.id] }))
-			await updateDoc(docRef, {
-				usersId: arrayUnion(user?.id),
-			})
-		} catch (error) {
-			setChat((p) => ({ ...p, usersId: prevData }))
-			console.log(error.code)
+		if (chat) {
+			let prevData = [...chat.usersId]
+			try {
+				setChat((p) => ({ ...p, usersId: [...p.usersId, user.id] }))
+				await Chats.joinChat({ chatId, userId: user.id })
+			} catch (error) {
+				setChat((p) => ({ ...p, usersId: prevData }))
+				console.log(error.code)
+			}
 		}
 	}
-	const isAdmin = user?.id === chat?.ownerId
 	React.useEffect(() => {
 		let mounted = true
 		const getChat = async () => {
 			try {
-				const docRef = doc(db, 'chats', chatId)
-				const docSnap = await getDoc(docRef)
-				if (docSnap.exists() && mounted) {
-					setChat({ ...docSnap.data() })
-					let ownerId = docSnap.data().ownerId
-					let ownerRef = doc(db, 'users', ownerId)
-					let ownerSnap = await getDoc(ownerRef)
-					if (ownerSnap.exists() && mounted)
-						setChat((p) => ({ ...p, admin: ownerSnap.data() }))
-
-					let usersId = docSnap.data().usersId
-					let roomUsers = []
-					usersId.forEach(async (userId) => {
-						let userRef = doc(db, 'users', userId)
-						let userSnap = await getDoc(userRef)
-						if (userSnap.exists()) {
-							roomUsers.push(userSnap.data())
-						}
-					})
-					setChat((p) => ({ ...p, roomUsers: roomUsers }))
-				}
-				if (!docSnap.exists() && mounted) setError(ChatErrorType.notExist)
+				let chatData = await Chats.getChat({ chatId })
+				setChat(chatData)
 			} catch (error) {
 				console.log(error)
+				if (error.message === 'no-chat-found') {
+					setError(ChatErrorType.notExist)
+				}
 			} finally {
 				if (mounted) setIsLoading(false)
 			}
@@ -92,10 +73,7 @@ export const ChatPageProvider = ({ children }) => {
 			mounted = false
 			const setLastSeen = async () => {
 				try {
-					let chatRef = doc(db, 'chats', chatId)
-					await updateDoc(chatRef, {
-						[`usersLastSeen.${user?.id}`]: Timestamp.now().toMillis(),
-					})
+					await Chats.updateUserLastSeen({ userId: user.id, chatId })
 				} catch (error) {
 					console.log(error.code)
 				}
@@ -113,7 +91,7 @@ export const ChatPageProvider = ({ children }) => {
 				error,
 				deleteChat,
 				changeChatName,
-				isAdmin
+				isAdmin,
 			}}
 		>
 			{children}
