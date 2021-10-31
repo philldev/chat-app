@@ -1,34 +1,13 @@
-import * as React from 'react'
-import chatsCollection from '../../api/chat'
 import { Box, Text } from '@chakra-ui/layout'
+import * as React from 'react'
 import { Link } from 'react-router-dom'
-import { useAuth } from '../../context/AuthContext'
+import { useChatsData } from '../../hooks/useChatsData'
 import { ChatItem } from './ChatItem'
 
-const Chats = chatsCollection()
-
 export const ChatList = () => {
-	const { user } = useAuth()
-	const [chats, setChats] = React.useState([])
-	React.useEffect(() => {
-		let mounted = true
-		const getChats = async () => {
-			try {
-				const chatsFromDoc = await Chats.getUsersChats({ user })
-				if (mounted) setChats(chatsFromDoc)
-			} catch (error) {
-				console.log(error.code)
-			}
-		}
-		getChats()
-		return () => {
-			mounted = false
-		}
-	}, [user])
+	const { chats } = useChatsData()
 	return (
-		<Box
-		flexGrow='1'
-		>
+		<Box flexGrow='1'>
 			<Text p='4'>Welcome to Chat Rooms!</Text>
 			{chats.map((chat, index) => (
 				<Link key={index} to={`/chat/${chat.id}`}>

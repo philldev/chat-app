@@ -1,5 +1,5 @@
-import { Box, Flex } from '@chakra-ui/layout'
 import * as React from 'react'
+import { Flex, Text } from '@chakra-ui/layout'
 import { ChatProvider } from '../../context/ChatContext'
 import { useHomeDesktop } from '../../context/HomeDesktopContext'
 import { ChatHeader } from '../ChatHeader'
@@ -36,7 +36,9 @@ export const HomeDesktop = () => {
 					</ChatProvider>
 				</Flex>
 			) : (
-				<Box>b</Box>
+				<Flex alignItems='center' justifyContent='center' flexGrow='1'>
+					<Text>No Chat Selected</Text>
+				</Flex>
 			)}
 		</Flex>
 	)
