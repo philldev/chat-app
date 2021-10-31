@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useHistory, useParams } from 'react-router'
+import { useHistory } from 'react-router'
 import chatsCollection from '../api/chat'
 import { useAuth } from './AuthContext'
 
@@ -11,11 +11,10 @@ export const ChatErrorType = {
 
 const Chats = chatsCollection()
 
-export const ChatPageProvider = ({ children }) => {
+export const ChatProvider = ({ children, chatId }) => {
 	const [chat, setChat] = React.useState(null)
 	const [error, setError] = React.useState(null)
 	const [isLoading, setIsLoading] = React.useState(true)
-	const { chatId } = useParams()
 	const { user } = useAuth()
 	const history = useHistory()
 	const isMember = chat?.usersId?.some((ids) => ids === user?.id)
@@ -92,6 +91,7 @@ export const ChatPageProvider = ({ children }) => {
 				deleteChat,
 				changeChatName,
 				isAdmin,
+				chatId
 			}}
 		>
 			{children}

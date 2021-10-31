@@ -1,11 +1,12 @@
+import * as React from 'react'
 import { Button } from '@chakra-ui/button'
 import { useDisclosure } from '@chakra-ui/hooks'
 import { Flex, Text } from '@chakra-ui/layout'
-import * as React from 'react'
+import { useWindowWidth } from '@react-hook/window-size'
 import { Link } from 'react-router-dom'
-import { ChatErrorType, useChat } from '../../context/ChatPageContext'
 import { ChatRoomInfo } from './ChatRoomInfo'
 import { ChatRoomSettings } from './ChatRoomSettings'
+import { ChatErrorType, useChat } from '../context/ChatContext'
 
 export const ChatHeader = () => {
 	const { chat, error, isLoading } = useChat()
@@ -14,6 +15,7 @@ export const ChatHeader = () => {
 		onOpen: onChatSettingsOpen,
 		onClose: onChatSettingsClose,
 	} = useDisclosure()
+	const wWidth = useWindowWidth()
 	return (
 		<Flex
 			p='4'
@@ -33,7 +35,7 @@ export const ChatHeader = () => {
 				</>
 			)}
 			{error === ChatErrorType.notExist && <Text>Chat Room not found!</Text>}
-			{!isLoading && (
+			{!isLoading && wWidth <= 768 && (
 				<Button as={Link} to='/'>
 					Back
 				</Button>

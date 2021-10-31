@@ -15,6 +15,7 @@ export const ChatItem = ({
 	chatId,
 	usersLastSeen,
 	usersLength,
+	selected,
 }) => {
 	const { user } = useAuth()
 	const [unreadMessageCount, setUnreadMessageCount] = React.useState(null)
@@ -36,7 +37,13 @@ export const ChatItem = ({
 		getUnReadMessagesCount()
 	}, [user, chatId, usersLastSeen])
 	return (
-		<Box display='flex' p={4} cursor='pointer' _hover={{ bg: 'slate.200' }}>
+		<Box
+			display='flex'
+			p={4}
+			cursor='pointer'
+			bg={selected ? 'slate.200' : undefined}
+			_hover={{ bg: 'slate.200' }}
+		>
 			<Box position='relative' mr='4'>
 				<Avatar borderRadius='4' name={chatName} src={chatAvatarURL} />
 				{unreadMessageCount && (
