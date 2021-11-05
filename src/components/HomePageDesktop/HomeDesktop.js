@@ -12,7 +12,7 @@ import { ChatListDesktop } from './ChatListDesktop'
 export const HomeDesktop = () => {
 	const { selectedChat: selectedChatId } = useHomeDesktop()
 	return (
-		<Flex w='full' h='full'>
+		<Flex w='full' h='full' overflowY='auto'>
 			<Flex
 				flexDir='column'
 				borderRightColor='slate.500'
